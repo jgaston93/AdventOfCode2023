@@ -21,7 +21,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  FILE* fp = fopen(static_cast<const char*>(configuration_resource), "r");
+  FILE* fp = fopen(configuration_resource.c_str(), "r");
   if (fp == NULL)
   {
     return_code = RETURN_CODE_TYPE::INVALID_PARAM;
@@ -54,7 +54,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
     char line[256] = {0};
     for (unsigned int i = 0; i < m_num_games; i++)
     {
-      // Get line
+      // Clear buffer and get line
       memset(line, 0, sizeof(line));
       fgets(line, sizeof(line), fp);
 
@@ -67,6 +67,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
       m_games[i].num_sets = 1;
       for (unsigned int j = 0; j < sizeof(line); j++)
       {
+        // Count number of semicolons
         if (line[j] == ';')
           m_games[i].num_sets += 1;
         else if (line[j] == '\0')
@@ -96,10 +97,12 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
         set_info_ptr = strtok(set_info_ptr, ",");
         while (set_info_ptr != NULL)
         {
+          // Get number and color
           unsigned int number = 0;
           char color[32]      = {0};
           sscanf(set_info_ptr, "%lu %s", &number, color);
 
+          // Update number for each color
           if (strcmp(color, "red") == 0)
           {
             m_games[i].sets[set_index].num_red += number;
@@ -116,6 +119,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
           set_info_ptr = strtok(NULL, ",");
         }
 
+        // move substring to next set
         unsigned int set_info_length = strlen(substring);
         substring += set_info_length + 1;
 
@@ -136,24 +140,30 @@ void Day02::Solve(RETURN_CODE_TYPE::Value& return_code)
   unsigned int max_num_green = 13;
   unsigned int max_num_blue  = 14;
 
+  // Puzzle answers
   unsigned int valid_game_sum = 0;
   unsigned int power_sum      = 0;
 
   for (unsigned int i = 0; i < m_num_games; i++)
   {
+    // Check if game is valid for max colors
     bool is_game_valid = true;
 
+    // Tracking fewest colors for valid game
     unsigned int fewest_red   = 0;
     unsigned int fewest_blue  = 0;
     unsigned int fewest_green = 0;
 
+    // Check each set in each game
     for (unsigned int j = 0; j < m_games[i].num_sets; j++)
     {
+      // Determine if number of colors exceed maximum
       if (m_games[i].sets[j].num_red > max_num_red ||
           m_games[i].sets[j].num_green > max_num_green ||
           m_games[i].sets[j].num_blue > max_num_blue)
         is_game_valid = false;
 
+      // Track fewest colors needed
       if (m_games[i].sets[j].num_red > fewest_red)
         fewest_red = m_games[i].sets[j].num_red;
       if (m_games[i].sets[j].num_green > fewest_green)
@@ -162,17 +172,29 @@ void Day02::Solve(RETURN_CODE_TYPE::Value& return_code)
         fewest_blue = m_games[i].sets[j].num_blue;
     }
 
-    power_sum += (fewest_red * fewest_green * fewest_blue);
-
+    // Update sum for part 1
     if (is_game_valid)
       valid_game_sum += m_games[i].id;
+
+    // Update sum for part 2
+    power_sum += (fewest_red * fewest_green * fewest_blue);
   }
 
-  printf("Sum of IDs: %lu\n", valid_game_sum);
-  printf("Sum of powers: %lu\n", power_sum);
+  printf("Part 1 Solution: %lu\n", valid_game_sum);
+  printf("Part 2 Solution: %lu\n", power_sum);
 }
 
 void Day02::Finalize(RETURN_CODE_TYPE::Value& return_code)
 {
+  for (unsigned int i = 0; i < m_num_games; i++)
+  {
+    for (unsigned int j = 0; j < m_games[i].num_sets; j++)
+    {
+      m_games[i].num_sets = 0;
+      delete[] m_games[i].sets;
+    }
+  }
+  m_num_games = 0;
+  delete[] m_games;
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 }

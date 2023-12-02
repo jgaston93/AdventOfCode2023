@@ -39,7 +39,7 @@ void Day01::Configure(const ConfigurationResource configuration_resource,
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  m_fp = fopen(static_cast<const char*>(configuration_resource), "r");
+  m_fp = fopen(configuration_resource.c_str(), "r");
   if (m_fp == NULL)
   {
     return_code = RETURN_CODE_TYPE::INVALID_PARAM;
@@ -52,27 +52,32 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
 
   char line[256];
 
-  unsigned int calibration_values_sum = 0;
+  unsigned int part_1_solution = 0;
+  unsigned int part_2_solution = 0;
 
   // iterate over each line in the file
   while (fgets(line, sizeof(line), m_fp) != NULL)
   {
-    unsigned int first = 0, last = 0;
     char current_char       = line[0];
     unsigned int line_index = 1;
-    bool first_digit_found  = false;
+
+    // used to track only numeric digits
+    unsigned int digit_list_length = 0;
+    unsigned int digit_list[32]    = {0};
+    // used to track numeric and alphanumeric digits
+    unsigned int full_digit_list_length = 0;
+    unsigned int full_digit_list[32]    = {0};
 
     // iterate over each character in line until
     // newline or null terminator found
     while (current_char != '\n' && current_char != '\0')
     {
       unsigned int digit = 0;
-      bool digit_found   = false;
       // check if character is a number
       if ('0' <= current_char && current_char <= '9')
       {
-        digit       = current_char - '0';
-        digit_found = true;
+        digit_list[digit_list_length++]           = current_char - '0';
+        full_digit_list[full_digit_list_length++] = current_char - '0';
       }
       // check if number is spelled out
       else
@@ -81,11 +86,11 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
         unsigned int line_length = strlen(&(line[line_index - 1]));
 
         // iterate over digit strings
+        bool digit_found = false;
         for (unsigned int i = 0; i < 9 && !digit_found; i++)
         {
           // get length of digit string
           unsigned int digit_string_length = strlen(m_digit_strings[i]);
-          // strlen(static_cast<const char*>(&(m_digit_strings[i])));
 
           // ensure that remaining line length is
           // at least as long as digit string length
@@ -95,31 +100,24 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
             if (strncmp(m_digit_strings[i], &(line[line_index - 1]),
                         digit_string_length) == 0)
             {
-              digit       = i + 1;
-              digit_found = true;
+              full_digit_list[full_digit_list_length++] = i + 1;
             }
           }
         }
       }
-
-      if (digit_found)
-      {
-        // Set last to current found digit
-        last = digit;
-        // If first digit is found set the first character
-        if (!first_digit_found)
-        {
-          first             = digit;
-          first_digit_found = true;
-        }
-      }
-
       current_char = line[line_index++];
     }
-    calibration_values_sum += (first * 10) + last;
+    if (digit_list_length > 0)
+    {
+      part_1_solution +=
+        (digit_list[0] * 10) + digit_list[digit_list_length - 1];
+    }
+    part_2_solution +=
+      (full_digit_list[0] * 10) + full_digit_list[full_digit_list_length - 1];
   }
 
-  printf("Sum of all calibration values is %lu\n", calibration_values_sum);
+  printf("Part 1 solution: %lu\n", part_1_solution);
+  printf("Part 2 solution: %lu\n", part_2_solution);
 }
 
 void Day01::Finalize(RETURN_CODE_TYPE::Value& return_code)

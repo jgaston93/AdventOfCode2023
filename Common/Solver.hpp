@@ -1,7 +1,9 @@
 #ifndef SOLVER_HPP
 #define SOLVER_HPP
 
-typedef const char* ConfigurationResource;
+#include <string>
+
+typedef std::string ConfigurationResource;
 
 struct RETURN_CODE_TYPE
 {

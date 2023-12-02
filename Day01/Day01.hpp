@@ -1,15 +1,15 @@
-#ifndef DAY_1_HPP
-#define DAY_1_HPP
+#ifndef DAY_01_HPP
+#define DAY_01_HPP
 
 #include <cstdio>
 
 #include "Solver.hpp"
 
-class Day1 : public Solver
+class Day01 : public Solver
 {
   public:
-  Day1();
-  ~Day1();
+  Day01();
+  ~Day01();
   void Initialize(RETURN_CODE_TYPE::Value& return_code);
   void Configure(const ConfigurationResource configuration_resource,
                  RETURN_CODE_TYPE::Value& return_code);
@@ -23,4 +23,4 @@ class Day1 : public Solver
   FILE* m_fp;
 };
 
-#endif // DAY_1_HPP
+#endif // DAY_01_HPP

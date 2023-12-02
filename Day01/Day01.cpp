@@ -1,19 +1,19 @@
 #include <cstring>
 
-#include "Day1.hpp"
+#include "Day01.hpp"
 
-Day1::Day1()
+Day01::Day01()
   : m_num_strings(9), m_max_string_length(8), m_digit_strings(0), m_fp(NULL)
 {
 }
 
-Day1::~Day1()
+Day01::~Day01()
 {
   RETURN_CODE_TYPE::Value return_code = RETURN_CODE_TYPE::NO_ERROR;
   Finalize(return_code);
 }
 
-void Day1::Initialize(RETURN_CODE_TYPE::Value& return_code)
+void Day01::Initialize(RETURN_CODE_TYPE::Value& return_code)
 {
   m_digit_strings = new char*[m_num_strings];
   for (unsigned int i = 0; i < m_num_strings; i++)
@@ -34,8 +34,8 @@ void Day1::Initialize(RETURN_CODE_TYPE::Value& return_code)
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 }
 
-void Day1::Configure(const ConfigurationResource configuration_resource,
-                     RETURN_CODE_TYPE::Value& return_code)
+void Day01::Configure(const ConfigurationResource configuration_resource,
+                      RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
@@ -46,7 +46,7 @@ void Day1::Configure(const ConfigurationResource configuration_resource,
   }
 }
 
-void Day1::Solve(RETURN_CODE_TYPE::Value& return_code)
+void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
@@ -122,7 +122,7 @@ void Day1::Solve(RETURN_CODE_TYPE::Value& return_code)
   printf("Sum of all calibration values is %lu\n", calibration_values_sum);
 }
 
-void Day1::Finalize(RETURN_CODE_TYPE::Value& return_code)
+void Day01::Finalize(RETURN_CODE_TYPE::Value& return_code)
 {
   fclose(m_fp);
   for (unsigned int i = 0; i < m_num_strings; i++)

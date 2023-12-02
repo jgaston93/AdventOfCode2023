@@ -3,7 +3,8 @@
 
 #include "cxxopts.hpp"
 
-#include "Day1/Day1.hpp"
+#include "Day01/Day01.hpp"
+#include "Day02/Day02.hpp"
 
 int main(int argc, char** argv)
 {
@@ -21,7 +22,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  Solver* solver = new Day1();
+  Solver* solver = new Day02();
 
   RETURN_CODE_TYPE::Value return_code = RETURN_CODE_TYPE::NO_ERROR;
 

@@ -76,8 +76,26 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
       // check if character is a number
       if ('0' <= current_char && current_char <= '9')
       {
-        digit_list[digit_list_length++]           = current_char - '0';
-        full_digit_list[full_digit_list_length++] = current_char - '0';
+        // Add digit to list if size is not exceeded
+        if (digit_list_length < (sizeof(digit_list) / sizeof(unsigned int)))
+        {
+          digit_list[digit_list_length++] = current_char - '0';
+        }
+        else
+        {
+          printf("Warning exceeded digit_list length\n");
+        }
+
+        // Add digit to full list if size is not exceeded
+        if (full_digit_list_length <
+            (sizeof(full_digit_list) / sizeof(unsigned int)))
+        {
+          full_digit_list[full_digit_list_length++] = current_char - '0';
+        }
+        else
+        {
+          printf("Warning exceeded full_digit_list length\n");
+        }
       }
       // check if number is spelled out
       else
@@ -100,7 +118,15 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
             if (strncmp(m_digit_strings[i], &(line[line_index - 1]),
                         digit_string_length) == 0)
             {
-              full_digit_list[full_digit_list_length++] = i + 1;
+              if (full_digit_list_length <
+                  (sizeof(full_digit_list) / sizeof(unsigned int)))
+              {
+                full_digit_list[full_digit_list_length++] = i + 1;
+              }
+              else
+              {
+                printf("Warning exceeded full_digit_list length\n");
+              }
             }
           }
         }
@@ -108,12 +134,12 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
       current_char = line[line_index++];
     }
     if (digit_list_length > 0)
-    {
       part_1_solution +=
         (digit_list[0] * 10) + digit_list[digit_list_length - 1];
-    }
-    part_2_solution +=
-      (full_digit_list[0] * 10) + full_digit_list[full_digit_list_length - 1];
+
+    if (full_digit_list_length > 0)
+      part_2_solution +=
+        (full_digit_list[0] * 10) + full_digit_list[full_digit_list_length - 1];
   }
 
   printf("Part 1 solution: %lu\n", part_1_solution);

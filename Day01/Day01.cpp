@@ -10,11 +10,14 @@ Day01::Day01()
 Day01::~Day01()
 {
   RETURN_CODE_TYPE::Value return_code = RETURN_CODE_TYPE::NO_ERROR;
+
   Finalize(return_code);
 }
 
 void Day01::Initialize(RETURN_CODE_TYPE::Value& return_code)
 {
+  return_code = RETURN_CODE_TYPE::NO_ERROR;
+
   m_digit_strings = new char*[m_num_strings];
   for (unsigned int i = 0; i < m_num_strings; i++)
   {
@@ -30,8 +33,6 @@ void Day01::Initialize(RETURN_CODE_TYPE::Value& return_code)
   strcpy(m_digit_strings[6], "seven");
   strcpy(m_digit_strings[7], "eight");
   strcpy(m_digit_strings[8], "nine");
-
-  return_code = RETURN_CODE_TYPE::NO_ERROR;
 }
 
 void Day01::Configure(const ConfigurationResource configuration_resource,
@@ -148,11 +149,12 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
 
 void Day01::Finalize(RETURN_CODE_TYPE::Value& return_code)
 {
+  return_code = RETURN_CODE_TYPE::NO_ERROR;
+
   fclose(m_fp);
   for (unsigned int i = 0; i < m_num_strings; i++)
   {
     delete[] m_digit_strings[i];
   }
   delete[] m_digit_strings;
-  return_code = RETURN_CODE_TYPE::NO_ERROR;
 }

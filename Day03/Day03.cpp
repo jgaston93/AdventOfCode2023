@@ -8,6 +8,7 @@ Day03::Day03() : m_nodes(NULL), m_num_rows(0), m_num_columns(0) {}
 Day03::~Day03()
 {
   RETURN_CODE_TYPE::Value return_code = RETURN_CODE_TYPE::NO_ERROR;
+
   Finalize(return_code);
 }
 
@@ -206,6 +207,8 @@ void Day03::Solve(RETURN_CODE_TYPE::Value& return_code)
 
 void Day03::Finalize(RETURN_CODE_TYPE::Value& return_code)
 {
+  return_code = RETURN_CODE_TYPE::NO_ERROR;
+
   m_num_rows    = 0;
   m_num_columns = 0;
   for (unsigned int i = 0; i < m_num_rows; i++)
@@ -217,5 +220,4 @@ void Day03::Finalize(RETURN_CODE_TYPE::Value& return_code)
     delete[] m_nodes[i];
   }
   delete[] m_nodes;
-  return_code = RETURN_CODE_TYPE::NO_ERROR;
 }

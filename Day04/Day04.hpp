@@ -6,6 +6,7 @@
 struct Card
 {
   unsigned int card_number;
+  unsigned int card_count;
   unsigned int winning_number_count;
   unsigned int my_number_count;
   unsigned int* winning_numbers;

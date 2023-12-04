@@ -8,6 +8,7 @@ Day02::Day02() : m_num_games(0), m_games(NULL) {}
 Day02::~Day02()
 {
   RETURN_CODE_TYPE::Value return_code = RETURN_CODE_TYPE::NO_ERROR;
+
   Finalize(return_code);
 }
 
@@ -187,6 +188,8 @@ void Day02::Solve(RETURN_CODE_TYPE::Value& return_code)
 
 void Day02::Finalize(RETURN_CODE_TYPE::Value& return_code)
 {
+  return_code = RETURN_CODE_TYPE::NO_ERROR;
+
   for (unsigned int i = 0; i < m_num_games; i++)
   {
     for (unsigned int j = 0; j < m_games[i].num_sets; j++)
@@ -197,5 +200,4 @@ void Day02::Finalize(RETURN_CODE_TYPE::Value& return_code)
   }
   m_num_games = 0;
   delete[] m_games;
-  return_code = RETURN_CODE_TYPE::NO_ERROR;
 }

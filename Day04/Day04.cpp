@@ -19,6 +19,7 @@ void Day04::Initialize(RETURN_CODE_TYPE::Value& return_code)
 void Day04::Configure(const ConfigurationResource configuration_resource,
                       RETURN_CODE_TYPE::Value& return_code)
 {
+  return_code = RETURN_CODE_TYPE::NO_ERROR;
 
   FILE* fp = fopen(configuration_resource.c_str(), "r");
   if (fp == NULL)
@@ -73,6 +74,7 @@ void Day04::Configure(const ConfigurationResource configuration_resource,
     while (fgets(line, sizeof(line), fp) != NULL)
     {
       m_cards[card_id].card_number          = card_id + 1;
+      m_cards[card_id].card_count           = 1;
       m_cards[card_id].winning_number_count = winning_number_count;
       m_cards[card_id].my_number_count      = my_number_count;
       m_cards[card_id].winning_numbers = new unsigned int[winning_number_count];
@@ -110,28 +112,62 @@ void Day04::Configure(const ConfigurationResource configuration_resource,
     }
 
     fclose(fp);
-
-    for (unsigned int i = 0; i < m_card_count; i++)
-    {
-      for (unsigned int j = 0; j < m_cards[i].winning_number_count; j++)
-      {
-        printf("%lu ", m_cards[i].winning_numbers[j]);
-      }
-      printf("\n");
-      for (unsigned int j = 0; j < m_cards[i].my_number_count; j++)
-      {
-        printf("%lu ", m_cards[i].my_numbers[j]);
-      }
-      printf("\n\n");
-    }
   }
-
-  return_code = RETURN_CODE_TYPE::NO_ERROR;
 }
 
 void Day04::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
+
+  // Iterate over all cards
+  unsigned int score_sum = 0;
+  for (unsigned int i = 0; i < m_card_count; i++)
+  {
+    // Iterate over my numbers on card
+    unsigned int card_score            = 0;
+    unsigned int winning_numbers_found = 0;
+    for (unsigned int j = 0; j < m_cards[i].my_number_count; j++)
+    {
+      // Find matching numbers
+      bool card_found = false;
+      for (unsigned int k = 0;
+           k < m_cards[i].winning_number_count && !card_found; k++)
+      {
+        if (m_cards[i].my_numbers[j] == m_cards[i].winning_numbers[k])
+        {
+          // If found update card score and
+          // track number of winning numbers found
+          card_found = true;
+          if (winning_numbers_found > 0)
+          {
+            card_score *= 2;
+          }
+          else
+          {
+            card_score += 1;
+          }
+          winning_numbers_found++;
+        }
+      }
+    }
+
+    // Update card counts for subsequent cards based on current card count
+    for (unsigned int j = 0; j < winning_numbers_found; j++)
+    {
+      m_cards[i + j + 1].card_count += m_cards[i].card_count;
+    }
+    score_sum += card_score;
+  }
+
+  // Get total card count
+  unsigned int total_card_count = 0;
+  for (unsigned int i = 0; i < m_card_count; i++)
+  {
+    total_card_count += m_cards[i].card_count;
+  }
+
+  printf("Part 1 solution: %lu\n", score_sum);
+  printf("Part 2 solution: %lu\n", total_card_count);
 }
 
 void Day04::Finalize(RETURN_CODE_TYPE::Value& return_code)

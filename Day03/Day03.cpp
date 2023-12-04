@@ -121,6 +121,7 @@ void Day03::Configure(const ConfigurationResource configuration_resource,
       row_index++;
       memset(line, 0, sizeof(line));
     }
+    fclose(fp);
   }
 }
 

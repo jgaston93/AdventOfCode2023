@@ -3,6 +3,15 @@
 
 #include "Solver.hpp"
 
+struct Card
+{
+  unsigned int card_number;
+  unsigned int winning_number_count;
+  unsigned int my_number_count;
+  unsigned int* winning_numbers;
+  unsigned int* my_numbers;
+};
+
 class Day04 : public Solver
 {
   public:
@@ -15,6 +24,8 @@ class Day04 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
+  unsigned int m_card_count;
+  struct Card* m_cards;
 };
 
 #endif // DAY_04_HPP

@@ -128,6 +128,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
         set_index++;
       }
     }
+    fclose(fp);
   }
 }
 

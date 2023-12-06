@@ -94,8 +94,6 @@ void Day05::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  unsigned int lowest_location_number = 0xFFFFFFFF;
-
   const unsigned int max_num_seed_ranges = 1024;
   unsigned int num_seed_ranges           = 0;
   struct SeedRange seed_ranges[max_num_seed_ranges];
@@ -157,17 +155,15 @@ void Day05::Solve(RETURN_CODE_TYPE::Value& return_code)
             mapping_range.destination_start - mapping_range.source_start;
           mapping_found = true;
         }
-        if (seed_range.start < lowest_location_number)
-          lowest_location_number = seed_range.start;
       }
     }
+  }
 
-    for (unsigned int k = 0; k < num_seed_ranges; k++)
-    {
-      printf("Seed Range[%lu]: %lu %lu\n", k, seed_ranges[k].start,
-             seed_ranges[k].start + seed_ranges[k].length);
-    }
-    printf("\n");
+  unsigned int lowest_location_number = 0xFFFFFFFF;
+  for (unsigned int i = 0; i < num_seed_ranges; i++)
+  {
+    if (seed_ranges[i].start < lowest_location_number)
+      lowest_location_number = seed_ranges[i].start;
   }
 
   printf("Part 2 solution: %lu\n", lowest_location_number);

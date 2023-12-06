@@ -94,34 +94,38 @@ void Day05::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  for (unsigned int i = 0; i < m_num_seeds; i++)
+  unsigned int lowest_location_number = 0xFFFFFFFF;
+
+  unsigned int counter = 1;
+  for (unsigned int i = 0; i < m_num_seeds; i += 2)
   {
-    for (unsigned int j = 0; j < m_num_mappings; j++)
+    printf("Seed Range %lu/%lu\n", counter++, m_num_seeds / 2);
+    for (unsigned int x = m_seeds[i]; x < m_seeds[i] + m_seeds[i + 1]; x++)
     {
-      bool mapping_found = false;
-      for (unsigned int k = 0; k < m_mappings[j].num_ranges && !mapping_found;
-           k++)
+      unsigned int seed_number = x;
+      for (unsigned int j = 0; j < m_num_mappings; j++)
       {
-        if (m_mappings[j].ranges[k].source_start <= m_seeds[i] &&
-            m_seeds[i] <= m_mappings[j].ranges[k].source_start +
-                            m_mappings[j].ranges[k].range)
+        bool mapping_found = false;
+        for (unsigned int k = 0; k < m_mappings[j].num_ranges && !mapping_found;
+             k++)
         {
-          m_seeds[i] += m_mappings[j].ranges[k].destination_start -
-                        m_mappings[j].ranges[k].source_start;
-          mapping_found = true;
+          if (m_mappings[j].ranges[k].source_start <= seed_number &&
+              seed_number <= m_mappings[j].ranges[k].source_start +
+                               m_mappings[j].ranges[k].range)
+          {
+            seed_number += m_mappings[j].ranges[k].destination_start -
+                           m_mappings[j].ranges[k].source_start;
+            mapping_found = true;
+          }
         }
       }
+
+      if (seed_number < lowest_location_number)
+        lowest_location_number = seed_number;
     }
   }
 
-  unsigned int lowest_location_number = 0xFFFFFFFF;
-  for (unsigned int i = 0; i < m_num_seeds; i++)
-  {
-    if (m_seeds[i] < lowest_location_number)
-      lowest_location_number = m_seeds[i];
-  }
-
-  printf("Part 1 solution: %lu\n", lowest_location_number);
+  printf("Part 2 solution: %lu\n", lowest_location_number);
 }
 
 void Day05::Finalize(RETURN_CODE_TYPE::Value& return_code)

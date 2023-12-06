@@ -65,7 +65,7 @@ void Day05::Configure(const ConfigurationResource configuration_resource,
                    .source_start),
                &(m_mappings[m_num_mappings]
                    .ranges[m_mappings[m_num_mappings].num_ranges]
-                   .range));
+                   .length));
         m_mappings[m_num_mappings].num_ranges++;
 
         fgets(line, sizeof(line), fp);
@@ -81,7 +81,7 @@ void Day05::Configure(const ConfigurationResource configuration_resource,
                    .source_start),
                &(m_mappings[m_num_mappings]
                    .ranges[m_mappings[m_num_mappings].num_ranges]
-                   .range));
+                   .length));
         m_mappings[m_num_mappings].num_ranges++;
       }
 
@@ -96,33 +96,78 @@ void Day05::Solve(RETURN_CODE_TYPE::Value& return_code)
 
   unsigned int lowest_location_number = 0xFFFFFFFF;
 
-  unsigned int counter = 1;
+  const unsigned int max_num_seed_ranges = 1024;
+  unsigned int num_seed_ranges           = 0;
+  struct SeedRange seed_ranges[max_num_seed_ranges];
   for (unsigned int i = 0; i < m_num_seeds; i += 2)
   {
-    printf("Seed Range %lu/%lu\n", counter++, m_num_seeds / 2);
-    for (unsigned int x = m_seeds[i]; x < m_seeds[i] + m_seeds[i + 1]; x++)
-    {
-      unsigned int seed_number = x;
-      for (unsigned int j = 0; j < m_num_mappings; j++)
-      {
-        bool mapping_found = false;
-        for (unsigned int k = 0; k < m_mappings[j].num_ranges && !mapping_found;
-             k++)
-        {
-          if (m_mappings[j].ranges[k].source_start <= seed_number &&
-              seed_number <= m_mappings[j].ranges[k].source_start +
-                               m_mappings[j].ranges[k].range)
-          {
-            seed_number += m_mappings[j].ranges[k].destination_start -
-                           m_mappings[j].ranges[k].source_start;
-            mapping_found = true;
-          }
-        }
-      }
+    seed_ranges[num_seed_ranges].start  = m_seeds[i];
+    seed_ranges[num_seed_ranges].length = m_seeds[i + 1];
+    num_seed_ranges++;
+  }
 
-      if (seed_number < lowest_location_number)
-        lowest_location_number = seed_number;
+  for (unsigned int i = 0; i < m_num_mappings; i++)
+  {
+    for (unsigned int j = 0; j < num_seed_ranges; j++)
+    {
+      SeedRange& seed_range = seed_ranges[j];
+      bool mapping_found    = false;
+      for (unsigned int k = 0; k < m_mappings[i].num_ranges && !mapping_found;
+           k++)
+      {
+        MappingRange mapping_range = m_mappings[i].ranges[k];
+
+        // Check for collision
+        if (seed_range.start <
+              (mapping_range.source_start + mapping_range.length) &&
+            (seed_range.start + seed_range.length) > mapping_range.source_start)
+        {
+          // Check left for non overlap
+          if (seed_range.start < mapping_range.source_start)
+          {
+            // Add non overlap to end of list
+            seed_ranges[num_seed_ranges].start = seed_range.start;
+            seed_ranges[num_seed_ranges].length =
+              mapping_range.source_start - seed_range.start;
+            num_seed_ranges++;
+
+            // Update current seed range
+            seed_range.length -= mapping_range.source_start - seed_range.start;
+            seed_range.start = mapping_range.source_start;
+          }
+          // Check right for non overlap
+          if ((seed_range.start + seed_range.length) >
+              (mapping_range.source_start + mapping_range.length))
+          {
+            // Add non overlap to end of list
+            seed_ranges[num_seed_ranges].start =
+              (mapping_range.source_start + mapping_range.length);
+            seed_ranges[num_seed_ranges].length =
+              (seed_range.start + seed_range.length) -
+              (mapping_range.source_start + mapping_range.length);
+            num_seed_ranges++;
+
+            // Update current seed range
+            seed_range.length -=
+              (seed_range.start + seed_range.length) -
+              (mapping_range.source_start + mapping_range.length);
+          }
+
+          seed_range.start +=
+            mapping_range.destination_start - mapping_range.source_start;
+          mapping_found = true;
+        }
+        if (seed_range.start < lowest_location_number)
+          lowest_location_number = seed_range.start;
+      }
     }
+
+    for (unsigned int k = 0; k < num_seed_ranges; k++)
+    {
+      printf("Seed Range[%lu]: %lu %lu\n", k, seed_ranges[k].start,
+             seed_ranges[k].start + seed_ranges[k].length);
+    }
+    printf("\n");
   }
 
   printf("Part 2 solution: %lu\n", lowest_location_number);

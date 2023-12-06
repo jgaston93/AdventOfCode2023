@@ -3,17 +3,23 @@
 
 #include "Solver.hpp"
 
-struct Range
+struct SeedRange
+{
+  unsigned int start  = 0;
+  unsigned int length = 0;
+};
+
+struct MappingRange
 {
   unsigned int destination_start = 0;
   unsigned int source_start      = 0;
-  unsigned int range             = 0;
+  unsigned int length            = 0;
 };
 
 struct Mapping
 {
   unsigned int num_ranges = 0;
-  Range ranges[256];
+  MappingRange ranges[256];
 };
 
 class Day05 : public Solver

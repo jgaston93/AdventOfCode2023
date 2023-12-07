@@ -11,6 +11,7 @@
 #include "Day04/Day04.hpp"
 #include "Day05/Day05.hpp"
 #include "Day06/Day06.hpp"
+#include "Day07/Day07.hpp"
 
 using json = nlohmann::json;
 
@@ -92,6 +93,10 @@ int main(int argc, char** argv)
   else if (solver_name.compare("Day06") == 0)
   {
     solver = new Day06();
+  }
+  else if (solver_name.compare("Day07") == 0)
+  {
+    solver = new Day07();
   }
   else
   {

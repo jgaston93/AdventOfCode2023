@@ -3,6 +3,27 @@
 
 #include "Solver.hpp"
 
+const unsigned int num_cards_per_hand = 5;
+
+enum HandType
+{
+  FIVE_OF_A_KIND,
+  FOUR_OF_A_KIND,
+  FULL_HOUSE,
+  THREE_OF_A_KIND,
+  TWO_PAIR,
+  ONE_PAIR,
+  HIGH_CARD,
+  NUM_HAND_TYPE,
+};
+
+struct Hand
+{
+  HandType hand_type = NUM_HAND_TYPE;
+  char cards[num_cards_per_hand];
+  unsigned int bid = 0;
+};
+
 class Day07 : public Solver
 {
   public:
@@ -15,6 +36,9 @@ class Day07 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
+  unsigned int m_num_hands = 0;
+  struct Hand m_hands[2048];
+  unsigned int m_ranks[2048];
 };
 
 #endif // DAY_07_HPP

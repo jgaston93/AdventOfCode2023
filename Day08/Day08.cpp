@@ -36,14 +36,18 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
   {
     char line[512] = {0};
 
+    // Get direction list from file
     fgets(line, sizeof(line), fp);
     sscanf(line, "%s", m_directions);
 
+    // Get number of directions
     for (unsigned int i = 0; i < 512 && line[i] != '\n'; i++)
       m_num_directions++;
 
+    // Skip empty line
     fgets(line, sizeof(line), fp);
 
+    // Read each node from file
     while (fgets(line, sizeof(line), fp) != NULL)
     {
       Node& node = m_nodes[m_num_nodes];
@@ -58,15 +62,18 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
       m_num_nodes++;
     }
 
+    // Connect nodes
     for (unsigned int i = 0; i < m_num_nodes; i++)
     {
       Node& node_a = m_nodes[i];
 
+      // Check for start nodes
       if (node_a.name[2] == 'A')
       {
         m_start_nodes[m_num_start_nodes++] = &node_a;
       }
 
+      // Find left and right nodes
       bool left_found  = false;
       bool right_found = false;
       for (unsigned int j = 0; j < m_num_nodes && (!left_found || !right_found);
@@ -74,12 +81,14 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
       {
         Node& node_b = m_nodes[j];
 
+        // Link left node
         if (!left_found && strcmp(node_a.left_name, node_b.name) == 0)
         {
           node_a.left = &node_b;
           left_found  = true;
         }
 
+        // Link right node
         if (!right_found && strcmp(node_a.right_name, node_b.name) == 0)
         {
           node_a.right = &node_b;
@@ -87,7 +96,6 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
         }
       }
     }
-
     fclose(fp);
   }
 }
@@ -96,47 +104,85 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  bool destination_found         = false;
-  unsigned int instruction_count = 0;
-  unsigned int direction_counter = 0;
-  char current_direction         = m_directions[direction_counter];
-
-  while (!destination_found)
+  unsigned long long int num_steps[512] = {0};
+  for (unsigned int i = 0; i < m_num_start_nodes; i++)
   {
-    unsigned int z_counter = 0;
-    for (unsigned int i = 0; i < m_num_start_nodes; i++)
+    unsigned int destination_count = 0; // Number of times reached Z
+    unsigned int destination_count_goal =
+      1;                                // Target number of times Z is reached
+    unsigned int instruction_count = 0; // Count number of steps taken
+    unsigned int direction_counter = 0; // Index into direction list
+    char current_direction =
+      m_directions[direction_counter];     // Get first direction
+    Node* current_node = m_start_nodes[i]; // Get start node
+    while (destination_count < destination_count_goal)
     {
-      if (m_start_nodes[i]->name[2] == 'Z')
+      // Check for destination
+      if (current_node->name[2] == 'Z')
       {
-        z_counter++;
+        destination_count++;
       }
-    }
 
-    if (z_counter == m_num_start_nodes)
-      destination_found = true;
-
-    if (!destination_found)
-    {
-      for (unsigned int i = 0; i < m_num_start_nodes; i++)
+      // Move to next node
+      if (destination_count < destination_count_goal)
       {
         if (current_direction == 'L')
         {
-          m_start_nodes[i] = m_start_nodes[i]->left;
+          current_node = current_node->left;
         }
         else
         {
-          m_start_nodes[i] = m_start_nodes[i]->right;
+          current_node = current_node->right;
         }
+        // Increase step count
+        instruction_count++;
+
+        // Round robin index for direction counter
+        direction_counter++;
+        if (direction_counter >= m_num_directions)
+          direction_counter = 0;
+        current_direction = m_directions[direction_counter];
       }
-      instruction_count++;
-      direction_counter++;
-      if (direction_counter >= m_num_directions)
-        direction_counter = 0;
-      current_direction = m_directions[direction_counter];
     }
+    // Save number of steps taken to destination
+    num_steps[i] = instruction_count;
   }
 
-  printf("Part 2 solution: %lu\n", instruction_count);
+  // Initialize step counter list with initial step sizes
+  unsigned long long int step_counter[512] = {0};
+  for (unsigned int i = 0; i < m_num_start_nodes; i++)
+    step_counter[i] = num_steps[i];
+
+  // Look for LCM
+  bool destination_found = false;
+  while (!destination_found)
+  {
+    // Find minimum value in step counter list
+    unsigned long long int min_value = 0xFFFFFFFFFFFFFFFF;
+    unsigned int min_value_index     = 0;
+    for (unsigned int i = 0; i < m_num_start_nodes; i++)
+    {
+      if (step_counter[i] < min_value)
+      {
+        min_value       = step_counter[i];
+        min_value_index = i;
+      }
+    }
+
+    // Increment minimum value
+    step_counter[min_value_index] += num_steps[min_value_index];
+
+    // Check if LCM found
+    bool all_matches = true;
+    for (unsigned int i = 0; i < m_num_start_nodes - 1 && all_matches; i++)
+    {
+      if (step_counter[i] != step_counter[i + 1])
+        all_matches = false;
+    }
+    if (all_matches)
+      destination_found = true;
+  }
+  printf("Part 2 solution: %llu", step_counter[0]);
 }
 
 void Day08::Finalize(RETURN_CODE_TYPE::Value& return_code)

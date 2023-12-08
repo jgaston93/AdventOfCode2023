@@ -43,6 +43,43 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
 
     printf("%lu %s\n", m_num_directions, m_directions);
 
+    fgets(line, sizeof(line), fp);
+
+    while (fgets(line, sizeof(line), fp) != NULL)
+    {
+      Node& node = m_nodes[m_num_nodes];
+      sscanf(line, "%c%c%c = (%c%c%c, %c%c%c)", &(node.name[0]),
+             &(node.name[1]), &(node.name[2]), &(node.left_name[0]),
+             &(node.left_name[1]), &(node.left_name[2]), &(node.right_name[0]),
+             &(node.right_name[1]), &(node.right_name[2]));
+
+      node.name[3]       = '\0';
+      node.left_name[3]  = '\0';
+      node.right_name[3] = '\0';
+      m_num_nodes++;
+    }
+
+    for (unsigned int i = 0; i < m_num_nodes; i++)
+    {
+      Node& node_a     = m_nodes[i];
+      bool left_found  = false;
+      bool right_found = false;
+      for (unsigned int j = 0; j < m_num_nodes && (!left_found || !right_found);
+           j++)
+      {
+        Node& node_b = m_nodes[j];
+
+        if (strcmp(node_a.name, node_b.name) != 0)
+        {
+          if (!left_found && strcmp(node_a.left_name, node_b.name) == 0)
+          {
+                    }
+        }
+      }
+      printf("%s = (%s, %s)\n", m_nodes[i].name, m_nodes[i].left_name,
+             m_nodes[i].right_name);
+    }
+
     fclose(fp);
   }
 }

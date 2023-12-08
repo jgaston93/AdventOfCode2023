@@ -3,6 +3,9 @@
 
 #include "Solver.hpp"
 
+namespace DAY07
+{
+
 const unsigned int num_cards_per_hand = 5;
 
 enum HandType
@@ -40,5 +43,7 @@ class Day07 : public Solver
   struct Hand m_hands[2048];
   unsigned int m_ranks[2048];
 };
+
+} // namespace DAY07
 
 #endif // DAY_07_HPP

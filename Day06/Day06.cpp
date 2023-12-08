@@ -3,6 +3,8 @@
 
 #include "Day06.hpp"
 
+using namespace DAY06;
+
 Day06::Day06() : m_num_race(0) {}
 
 Day06::~Day06()

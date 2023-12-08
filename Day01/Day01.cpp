@@ -2,6 +2,8 @@
 
 #include "Day01.hpp"
 
+using namespace DAY01;
+
 Day01::Day01()
   : m_num_strings(9), m_max_string_length(8), m_digit_strings(0), m_fp(NULL)
 {

@@ -3,6 +3,9 @@
 
 #include "Solver.hpp"
 
+namespace DAY04
+{
+
 struct Card
 {
   unsigned int card_number;
@@ -28,5 +31,7 @@ class Day04 : public Solver
   unsigned int m_card_count;
   struct Card* m_cards;
 };
+
+} // namespace DAY04
 
 #endif // DAY_04_HPP

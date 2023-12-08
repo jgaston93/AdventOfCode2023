@@ -4,6 +4,8 @@
 
 #include "Day07.hpp"
 
+using namespace DAY07;
+
 bool hand_comparator(Hand a, Hand b)
 {
   if (a.hand_type > b.hand_type)

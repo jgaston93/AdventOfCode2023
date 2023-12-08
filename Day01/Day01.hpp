@@ -5,6 +5,9 @@
 
 #include "Solver.hpp"
 
+namespace DAY01
+{
+
 class Day01 : public Solver
 {
   public:
@@ -22,5 +25,7 @@ class Day01 : public Solver
   char** m_digit_strings;
   FILE* m_fp;
 };
+
+} // namespace DAY01
 
 #endif // DAY_01_HPP

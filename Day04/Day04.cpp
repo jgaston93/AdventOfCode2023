@@ -3,6 +3,8 @@
 
 #include "Day04.hpp"
 
+using namespace DAY04;
+
 Day04::Day04() : m_card_count(0), m_cards(NULL) {}
 
 Day04::~Day04()

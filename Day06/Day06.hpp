@@ -3,6 +3,9 @@
 
 #include "Solver.hpp"
 
+namespace DAY06
+{
+
 struct Race
 {
   unsigned long long int time;
@@ -24,5 +27,7 @@ class Day06 : public Solver
   unsigned int m_num_race;
   struct Race m_races[256];
 };
+
+} // namespace DAY06
 
 #endif // DAY_06_HPP

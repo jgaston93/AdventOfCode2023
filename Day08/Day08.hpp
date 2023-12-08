@@ -3,6 +3,18 @@
 
 #include "Solver.hpp"
 
+namespace DAY08
+{
+
+struct Node
+{
+  char name[4];
+  char left_name[4];
+  char right_name[4];
+  Node* left;
+  Node* right;
+};
+
 class Day08 : public Solver
 {
   public:
@@ -15,6 +27,12 @@ class Day08 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
+  unsigned int m_num_nodes;
+  Node m_nodes[1024];
+  unsigned int m_num_directions;
+  char m_directions[256];
 };
+
+} // namespace DAY08
 
 #endif // DAY_08_HPP

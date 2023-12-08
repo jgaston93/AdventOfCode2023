@@ -3,6 +3,8 @@
 
 #include "Day05.hpp"
 
+using namespace DAY05;
+
 Day05::Day05() : m_num_seeds(0), m_num_mappings(0) {}
 
 Day05::~Day05()

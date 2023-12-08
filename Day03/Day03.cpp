@@ -3,6 +3,8 @@
 
 #include "Day03.hpp"
 
+using namespace DAY03;
+
 Day03::Day03() : m_nodes(NULL), m_num_rows(0), m_num_columns(0) {}
 
 Day03::~Day03()

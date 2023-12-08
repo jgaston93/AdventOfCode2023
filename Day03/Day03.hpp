@@ -3,6 +3,8 @@
 
 #include "Solver.hpp"
 
+namespace DAY03
+{
 enum Type
 {
   NUMBER,
@@ -54,5 +56,7 @@ class Day03 : public Solver
   unsigned int m_num_rows;
   unsigned int m_num_columns;
 };
+
+} // namespace DAY03
 
 #endif // DAY_03_HPP

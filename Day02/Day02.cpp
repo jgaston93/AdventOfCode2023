@@ -3,6 +3,8 @@
 
 #include "Day02.hpp"
 
+using namespace DAY02;
+
 Day02::Day02() : m_num_games(0), m_games(NULL) {}
 
 Day02::~Day02()

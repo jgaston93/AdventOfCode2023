@@ -3,6 +3,8 @@
 
 #include "Solver.hpp"
 
+namespace DAY02
+{
 struct Game
 {
   unsigned int id       = 0;
@@ -32,5 +34,7 @@ class Day02 : public Solver
   unsigned int m_num_games;
   struct Game* m_games;
 };
+
+} // namespace DAY02
 
 #endif // DAY_02_HPP

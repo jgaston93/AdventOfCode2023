@@ -73,35 +73,35 @@ int main(int argc, char** argv)
   Solver* solver = NULL;
   if (solver_name.compare("Day01") == 0)
   {
-    solver = new Day01();
+    solver = new DAY01::Day01();
   }
   else if (solver_name.compare("Day02") == 0)
   {
-    solver = new Day02();
+    solver = new DAY02::Day02();
   }
   else if (solver_name.compare("Day03") == 0)
   {
-    solver = new Day03();
+    solver = new DAY03::Day03();
   }
   else if (solver_name.compare("Day04") == 0)
   {
-    solver = new Day04();
+    solver = new DAY04::Day04();
   }
   else if (solver_name.compare("Day05") == 0)
   {
-    solver = new Day05();
+    solver = new DAY05::Day05();
   }
   else if (solver_name.compare("Day06") == 0)
   {
-    solver = new Day06();
+    solver = new DAY06::Day06();
   }
   else if (solver_name.compare("Day07") == 0)
   {
-    solver = new Day07();
+    solver = new DAY07::Day07();
   }
   else if (solver_name.compare("Day08") == 0)
   {
-    solver = new Day08();
+    solver = new DAY08::Day08();
   }
   else
   {

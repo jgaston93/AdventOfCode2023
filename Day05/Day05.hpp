@@ -3,6 +3,9 @@
 
 #include "Solver.hpp"
 
+namespace DAY05
+{
+
 struct SeedRange
 {
   unsigned int start  = 0;
@@ -39,5 +42,7 @@ class Day05 : public Solver
   unsigned int m_num_mappings;
   struct Mapping m_mappings[256];
 };
+
+} // namespace DAY05
 
 #endif // DAY_05_HPP

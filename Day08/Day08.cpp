@@ -3,7 +3,9 @@
 
 #include "Day08.hpp"
 
-Day08::Day08() {}
+using namespace DAY08;
+
+Day08::Day08() : m_num_nodes(0), m_num_directions(0) {}
 
 Day08::~Day08()
 {
@@ -14,6 +16,8 @@ Day08::~Day08()
 void Day08::Initialize(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
+  memset(m_nodes, 0, sizeof(m_nodes));
+  memset(m_directions, 0, sizeof(m_directions));
 }
 
 void Day08::Configure(const ConfigurationResource configuration_resource,
@@ -30,6 +34,14 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
   if (return_code == RETURN_CODE_TYPE::NO_ERROR)
   {
     char line[256] = {0};
+
+    fgets(line, sizeof(line), fp);
+    sscanf(line, "%s", m_directions);
+
+    for (unsigned int i = 0; i < 256 && line[i] != '\n'; i++)
+      m_num_directions++;
+
+    printf("%lu %s\n", m_num_directions, m_directions);
 
     fclose(fp);
   }

@@ -29,8 +29,10 @@ class Day08 : public Solver
   private:
   unsigned int m_num_nodes;
   Node m_nodes[1024];
+  unsigned int m_num_start_nodes;
+  Node* m_start_nodes[6];
   unsigned int m_num_directions;
-  char m_directions[256];
+  char m_directions[512];
 };
 
 } // namespace DAY08

@@ -5,7 +5,7 @@
 
 using namespace DAY08;
 
-Day08::Day08() : m_num_nodes(0), m_num_directions(0) {}
+Day08::Day08() : m_num_nodes(0), m_num_start_nodes(0), m_num_directions(0) {}
 
 Day08::~Day08()
 {
@@ -17,6 +17,7 @@ void Day08::Initialize(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
   memset(m_nodes, 0, sizeof(m_nodes));
+  memset(m_start_nodes, 0, sizeof(m_start_nodes));
   memset(m_directions, 0, sizeof(m_directions));
 }
 
@@ -33,15 +34,13 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
 
   if (return_code == RETURN_CODE_TYPE::NO_ERROR)
   {
-    char line[256] = {0};
+    char line[512] = {0};
 
     fgets(line, sizeof(line), fp);
     sscanf(line, "%s", m_directions);
 
-    for (unsigned int i = 0; i < 256 && line[i] != '\n'; i++)
+    for (unsigned int i = 0; i < 512 && line[i] != '\n'; i++)
       m_num_directions++;
-
-    printf("%lu %s\n", m_num_directions, m_directions);
 
     fgets(line, sizeof(line), fp);
 
@@ -61,7 +60,13 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
 
     for (unsigned int i = 0; i < m_num_nodes; i++)
     {
-      Node& node_a     = m_nodes[i];
+      Node& node_a = m_nodes[i];
+
+      if (node_a.name[2] == 'A')
+      {
+        m_start_nodes[m_num_start_nodes++] = &node_a;
+      }
+
       bool left_found  = false;
       bool right_found = false;
       for (unsigned int j = 0; j < m_num_nodes && (!left_found || !right_found);
@@ -69,15 +74,18 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
       {
         Node& node_b = m_nodes[j];
 
-        if (strcmp(node_a.name, node_b.name) != 0)
+        if (!left_found && strcmp(node_a.left_name, node_b.name) == 0)
         {
-          if (!left_found && strcmp(node_a.left_name, node_b.name) == 0)
-          {
-                    }
+          node_a.left = &node_b;
+          left_found  = true;
+        }
+
+        if (!right_found && strcmp(node_a.right_name, node_b.name) == 0)
+        {
+          node_a.right = &node_b;
+          right_found  = true;
         }
       }
-      printf("%s = (%s, %s)\n", m_nodes[i].name, m_nodes[i].left_name,
-             m_nodes[i].right_name);
     }
 
     fclose(fp);
@@ -87,6 +95,48 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
 void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
+
+  bool destination_found         = false;
+  unsigned int instruction_count = 0;
+  unsigned int direction_counter = 0;
+  char current_direction         = m_directions[direction_counter];
+
+  while (!destination_found)
+  {
+    unsigned int z_counter = 0;
+    for (unsigned int i = 0; i < m_num_start_nodes; i++)
+    {
+      if (m_start_nodes[i]->name[2] == 'Z')
+      {
+        z_counter++;
+      }
+    }
+
+    if (z_counter == m_num_start_nodes)
+      destination_found = true;
+
+    if (!destination_found)
+    {
+      for (unsigned int i = 0; i < m_num_start_nodes; i++)
+      {
+        if (current_direction == 'L')
+        {
+          m_start_nodes[i] = m_start_nodes[i]->left;
+        }
+        else
+        {
+          m_start_nodes[i] = m_start_nodes[i]->right;
+        }
+      }
+      instruction_count++;
+      direction_counter++;
+      if (direction_counter >= m_num_directions)
+        direction_counter = 0;
+      current_direction = m_directions[direction_counter];
+    }
+  }
+
+  printf("Part 2 solution: %lu\n", instruction_count);
 }
 
 void Day08::Finalize(RETURN_CODE_TYPE::Value& return_code)

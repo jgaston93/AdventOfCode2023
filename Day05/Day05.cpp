@@ -87,6 +87,7 @@ void Day05::Configure(const ConfigurationResource configuration_resource,
 
       m_num_mappings++;
     }
+    fclose(fp);
   }
 }
 

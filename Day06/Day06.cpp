@@ -66,6 +66,8 @@ void Day06::Configure(const ConfigurationResource configuration_resource,
     {
       printf("%lu %lu\n", m_races[i].time, m_races[i].distance);
     }
+
+    fclose(fp);
   }
 }
 

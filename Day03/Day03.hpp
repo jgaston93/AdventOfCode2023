@@ -14,17 +14,17 @@ enum Type
 
 struct Node
 {
-  unsigned int id;
+  uint32_t id;
   Type type;
 
-  Node(unsigned int id, Type type) : id(id), type(type){};
+  Node(uint32_t id, Type type) : id(id), type(type){};
 };
 
 struct NumberNode : public Node
 {
-  unsigned int part_number = 0;
+  uint32_t part_number = 0;
 
-  NumberNode(unsigned int id, unsigned int number)
+  NumberNode(uint32_t id, uint32_t number)
     : Node(id, NUMBER), part_number(number){};
 };
 
@@ -32,12 +32,12 @@ struct SymbolNode : public Node
 {
   char symbol = 0;
 
-  SymbolNode(unsigned int id, char symbol) : Node(id, SYMBOL), symbol(symbol){};
+  SymbolNode(uint32_t id, char symbol) : Node(id, SYMBOL), symbol(symbol){};
 };
 
 struct EmptyNode : public Node
 {
-  EmptyNode(unsigned int id) : Node(id, EMPTY){};
+  EmptyNode(uint32_t id) : Node(id, EMPTY){};
 };
 
 class Day03 : public Solver
@@ -53,8 +53,8 @@ class Day03 : public Solver
 
   private:
   Node*** m_nodes;
-  unsigned int m_num_rows;
-  unsigned int m_num_columns;
+  uint32_t m_num_rows;
+  uint32_t m_num_columns;
 };
 
 } // namespace DAY03

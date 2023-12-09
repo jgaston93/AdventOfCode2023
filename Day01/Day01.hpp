@@ -20,8 +20,8 @@ class Day01 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
-  const unsigned int m_num_strings;
-  const unsigned int m_max_string_length;
+  const uint32_t m_num_strings;
+  const uint32_t m_max_string_length;
   char** m_digit_strings;
   FILE* m_fp;
 };

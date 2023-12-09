@@ -27,11 +27,11 @@ class Day08 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
-  unsigned int m_num_nodes;
+  uint32_t m_num_nodes;
   Node m_nodes[1024];
-  unsigned int m_num_start_nodes;
-  Node* m_start_nodes[6];
-  unsigned int m_num_directions;
+  uint32_t m_num_start_nodes;
+  Node* m_start_nodes[512];
+  uint32_t m_num_directions;
   char m_directions[512];
 };
 

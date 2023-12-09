@@ -21,7 +21,7 @@ void Day01::Initialize(RETURN_CODE_TYPE::Value& return_code)
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
   m_digit_strings = new char*[m_num_strings];
-  for (unsigned int i = 0; i < m_num_strings; i++)
+  for (uint32_t i = 0; i < m_num_strings; i++)
   {
     m_digit_strings[i] = new char[m_max_string_length];
   }
@@ -55,32 +55,32 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
 
   char line[256];
 
-  unsigned int part_1_solution = 0;
-  unsigned int part_2_solution = 0;
+  uint32_t part_1_solution = 0;
+  uint32_t part_2_solution = 0;
 
   // iterate over each line in the file
   while (fgets(line, sizeof(line), m_fp) != NULL)
   {
     char current_char       = line[0];
-    unsigned int line_index = 1;
+    uint32_t line_index = 1;
 
     // used to track only numeric digits
-    unsigned int digit_list_length = 0;
-    unsigned int digit_list[32]    = {0};
+    uint32_t digit_list_length = 0;
+    uint32_t digit_list[32]    = {0};
     // used to track numeric and alphanumeric digits
-    unsigned int full_digit_list_length = 0;
-    unsigned int full_digit_list[32]    = {0};
+    uint32_t full_digit_list_length = 0;
+    uint32_t full_digit_list[32]    = {0};
 
     // iterate over each character in line until
     // newline or null terminator found
     while (current_char != '\n' && current_char != '\0')
     {
-      unsigned int digit = 0;
+      uint32_t digit = 0;
       // check if character is a number
       if ('0' <= current_char && current_char <= '9')
       {
         // Add digit to list if size is not exceeded
-        if (digit_list_length < (sizeof(digit_list) / sizeof(unsigned int)))
+        if (digit_list_length < (sizeof(digit_list) / sizeof(uint32_t)))
         {
           digit_list[digit_list_length++] = current_char - '0';
         }
@@ -91,7 +91,7 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
 
         // Add digit to full list if size is not exceeded
         if (full_digit_list_length <
-            (sizeof(full_digit_list) / sizeof(unsigned int)))
+            (sizeof(full_digit_list) / sizeof(uint32_t)))
         {
           full_digit_list[full_digit_list_length++] = current_char - '0';
         }
@@ -104,14 +104,14 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
       else
       {
         // get length of remaining line
-        unsigned int line_length = strlen(&(line[line_index - 1]));
+        uint32_t line_length = strlen(&(line[line_index - 1]));
 
         // iterate over digit strings
         bool digit_found = false;
-        for (unsigned int i = 0; i < 9 && !digit_found; i++)
+        for (uint32_t i = 0; i < 9 && !digit_found; i++)
         {
           // get length of digit string
-          unsigned int digit_string_length = strlen(m_digit_strings[i]);
+          uint32_t digit_string_length = strlen(m_digit_strings[i]);
 
           // ensure that remaining line length is
           // at least as long as digit string length
@@ -122,7 +122,7 @@ void Day01::Solve(RETURN_CODE_TYPE::Value& return_code)
                         digit_string_length) == 0)
             {
               if (full_digit_list_length <
-                  (sizeof(full_digit_list) / sizeof(unsigned int)))
+                  (sizeof(full_digit_list) / sizeof(uint32_t)))
               {
                 full_digit_list[full_digit_list_length++] = i + 1;
               }
@@ -154,7 +154,7 @@ void Day01::Finalize(RETURN_CODE_TYPE::Value& return_code)
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
   fclose(m_fp);
-  for (unsigned int i = 0; i < m_num_strings; i++)
+  for (uint32_t i = 0; i < m_num_strings; i++)
   {
     delete[] m_digit_strings[i];
   }

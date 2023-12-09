@@ -42,7 +42,7 @@ void Day06::Configure(const ConfigurationResource configuration_resource,
 
     while (line_ptr != NULL)
     {
-      unsigned int time = 0;
+      uint32_t time = 0;
       sscanf(line_ptr, "%lu", &time);
       m_races[m_num_race].time = time;
       m_num_race++;
@@ -54,17 +54,17 @@ void Day06::Configure(const ConfigurationResource configuration_resource,
 
     line_ptr             = strtok(line_ptr, ":");
     line_ptr             = strtok(NULL, " ");
-    unsigned int counter = 0;
+    uint32_t counter = 0;
     while (line_ptr != NULL)
     {
-      unsigned int distance = 0;
+      uint32_t distance = 0;
       sscanf(line_ptr, "%lu", &distance);
       m_races[counter].distance = distance;
       counter++;
       line_ptr = strtok(NULL, " ");
     }
 
-    for (unsigned int i = 0; i < m_num_race; i++)
+    for (uint32_t i = 0; i < m_num_race; i++)
     {
       printf("%lu %lu\n", m_races[i].time, m_races[i].distance);
     }
@@ -82,13 +82,13 @@ void Day06::Solve(RETURN_CODE_TYPE::Value& return_code)
   m_races[0].time     = 47986698;
   m_races[0].distance = 400121310111540;
 
-  unsigned long long int error_margin = 1;
-  for (unsigned long long int i = 0; i < m_num_race; i++)
+  uint64_t error_margin = 1;
+  for (uint64_t i = 0; i < m_num_race; i++)
   {
-    unsigned long long int num_win = 0;
-    for (unsigned long long int j = 0; j < m_races[i].time; j++)
+    uint64_t num_win = 0;
+    for (uint64_t j = 0; j < m_races[i].time; j++)
     {
-      unsigned long long int distance = j * (m_races[i].time - j);
+      uint64_t distance = j * (m_races[i].time - j);
       if (distance > m_races[i].distance)
       {
         num_win++;

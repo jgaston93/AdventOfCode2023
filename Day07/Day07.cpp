@@ -14,7 +14,7 @@ bool hand_comparator(Hand a, Hand b)
     return false;
   else
   {
-    for (unsigned int i = 0; i < num_cards_per_hand; i++)
+    for (uint32_t i = 0; i < num_cards_per_hand; i++)
     {
       if (a.cards[i] < b.cards[i])
         return true;
@@ -94,17 +94,17 @@ void Day07::Configure(const ConfigurationResource configuration_resource,
       sscanf(line, "%c%c%c%c%c %lu", &(hand.cards[0]), &(hand.cards[1]),
              &(hand.cards[2]), &(hand.cards[3]), &(hand.cards[4]), &(hand.bid));
 
-      for (unsigned int i = 0; i < num_cards_per_hand; i++)
+      for (uint32_t i = 0; i < num_cards_per_hand; i++)
         card2number(hand.cards[i]);
 
       char card_count_list[13] = {0};
 
-      for (unsigned int i = 0; i < num_cards_per_hand; i++)
+      for (uint32_t i = 0; i < num_cards_per_hand; i++)
         card_count_list[hand.cards[i]]++;
 
-      unsigned int max_card_count       = 0;
-      unsigned int max_card_count_index = 1;
-      for (unsigned int i = 1; i < 13; i++)
+      uint32_t max_card_count       = 0;
+      uint32_t max_card_count_index = 1;
+      for (uint32_t i = 1; i < 13; i++)
       {
         if (card_count_list[i] > max_card_count)
         {
@@ -157,8 +157,8 @@ void Day07::Solve(RETURN_CODE_TYPE::Value& return_code)
   return_code = RETURN_CODE_TYPE::NO_ERROR;
   std::sort(m_hands, m_hands + m_num_hands, hand_comparator);
 
-  unsigned int total_winnings = 0;
-  for (unsigned int i = 0; i < m_num_hands; i++)
+  uint32_t total_winnings = 0;
+  for (uint32_t i = 0; i < m_num_hands; i++)
   {
     total_winnings += (i + 1) * m_hands[i].bid;
   }

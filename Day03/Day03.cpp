@@ -48,22 +48,22 @@ void Day03::Configure(const ConfigurationResource configuration_resource,
 
     // Create 2D array of nodes that represent schematics
     m_nodes = new Node**[m_num_rows];
-    for (unsigned int i = 0; i < m_num_rows; i++)
+    for (uint32_t i = 0; i < m_num_rows; i++)
     {
       m_nodes[i] = new Node*[m_num_columns];
-      for (unsigned int j = 0; j < m_num_columns; j++)
+      for (uint32_t j = 0; j < m_num_columns; j++)
       {
         m_nodes[i][j] = NULL;
       }
     }
 
-    unsigned int node_id   = 0;
-    unsigned int row_index = 0;
+    uint32_t node_id   = 0;
+    uint32_t row_index = 0;
 
     // Iterate over file line by line
     while (fgets(line, sizeof(line), fp) != NULL)
     {
-      unsigned int column_index = 0;
+      uint32_t column_index = 0;
       // Iterate over line character by characters
       char* current_char = &line[0];
       while (*current_char != '\n' && *current_char != '\0')
@@ -72,7 +72,7 @@ void Day03::Configure(const ConfigurationResource configuration_resource,
         if ('0' <= *current_char && *current_char <= '9')
         {
           // Determine length of number
-          unsigned int number_length = 1;
+          uint32_t number_length = 1;
           char* next_char            = current_char + 1;
           while ('0' <= *next_char && *next_char <= '9')
           {
@@ -87,14 +87,14 @@ void Day03::Configure(const ConfigurationResource configuration_resource,
           strncat(format_specifier, "lu", sizeof(format_specifier));
 
           // Extract number from line
-          unsigned int number_value = 0;
+          uint32_t number_value = 0;
           sscanf(current_char, format_specifier, &number_value);
 
           // Create number node
           NumberNode* number_node = new NumberNode(node_id++, number_value);
 
           // Assign number node to all locations covered by number string
-          for (unsigned int i = 0; i < number_length; i++)
+          for (uint32_t i = 0; i < number_length; i++)
           {
             m_nodes[row_index][column_index + i] = number_node;
           }
@@ -132,13 +132,13 @@ void Day03::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  unsigned int part_sum       = 0;
-  unsigned int gear_ratio_sum = 0;
+  uint32_t part_sum       = 0;
+  uint32_t gear_ratio_sum = 0;
 
   // Iterate over schematic
-  for (unsigned int i = 0; i < m_num_rows; i++)
+  for (uint32_t i = 0; i < m_num_rows; i++)
   {
-    for (unsigned int j = 0; j < m_num_columns; j++)
+    for (uint32_t j = 0; j < m_num_columns; j++)
     {
       // Search for symbol nodes
       if (m_nodes[i][j]->type == SYMBOL)
@@ -161,20 +161,20 @@ void Day03::Solve(RETURN_CODE_TYPE::Value& return_code)
 
         // Keep track of visited number nodes to ensure no double counting
         // and to determine gear ratio
-        unsigned int num_visited_nodes = 0;
+        uint32_t num_visited_nodes = 0;
         Node* visited_nodes[8]         = {0};
 
         // Search nodes around symbol node
-        for (unsigned int k = top; k <= bottom; k++)
+        for (uint32_t k = top; k <= bottom; k++)
         {
-          for (unsigned int l = left; l <= right; l++)
+          for (uint32_t l = left; l <= right; l++)
           {
             // Check if node is a number node
             if (!(i == k && j == l) && m_nodes[k][l]->type == NUMBER)
             {
               // Determine if node has been visited
               bool visited = false;
-              for (unsigned int m = 0; m < num_visited_nodes && !visited; m++)
+              for (uint32_t m = 0; m < num_visited_nodes && !visited; m++)
               {
                 if (m_nodes[k][l]->id == visited_nodes[m]->id)
                   visited = true;
@@ -213,9 +213,9 @@ void Day03::Finalize(RETURN_CODE_TYPE::Value& return_code)
 
   m_num_rows    = 0;
   m_num_columns = 0;
-  for (unsigned int i = 0; i < m_num_rows; i++)
+  for (uint32_t i = 0; i < m_num_rows; i++)
   {
-    for (unsigned int j = 0; j < m_num_columns; j++)
+    for (uint32_t j = 0; j < m_num_columns; j++)
     {
       delete m_nodes[i][j];
     }

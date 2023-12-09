@@ -1,22 +1,19 @@
-#ifndef DAY_06_HPP
-#define DAY_06_HPP
+#ifndef DAY_09_HPP
+#define DAY_09_HPP
 
 #include "Solver.hpp"
 
-namespace DAY06
+const uint32_t max_report_length  = 200;
+const uint32_t max_history_length = 21;
+
+namespace DAY09
 {
 
-struct Race
-{
-  uint64_t time;
-  uint64_t distance;
-};
-
-class Day06 : public Solver
+class Day09 : public Solver
 {
   public:
-  Day06();
-  ~Day06();
+  Day09();
+  ~Day09();
   void Initialize(RETURN_CODE_TYPE::Value& return_code);
   void Configure(const ConfigurationResource configuration_resource,
                  RETURN_CODE_TYPE::Value& return_code);
@@ -24,10 +21,11 @@ class Day06 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
-  uint32_t m_num_race;
-  struct Race m_races[256];
+  uint32_t m_report_length;
+  uint32_t m_history_length;
+  int32_t m_report[max_report_length][max_history_length];
 };
 
-} // namespace DAY06
+} // namespace DAY09
 
-#endif // DAY_06_HPP
+#endif // DAY_09_HPP

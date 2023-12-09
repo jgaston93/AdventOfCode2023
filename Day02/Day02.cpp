@@ -55,20 +55,20 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
 
     // Parse each line for game information
     char line[256] = {0};
-    for (unsigned int i = 0; i < m_num_games; i++)
+    for (uint32_t i = 0; i < m_num_games; i++)
     {
       // Clear buffer and get line
       memset(line, 0, sizeof(line));
       fgets(line, sizeof(line), fp);
 
       // Get game ID;
-      unsigned int game_id = 0;
+      uint32_t game_id = 0;
       sscanf(line, "Game %lu:", &game_id);
       m_games[i].id = game_id;
 
       // Get number of sets per game
       m_games[i].num_sets = 1;
-      for (unsigned int j = 0; j < sizeof(line); j++)
+      for (uint32_t j = 0; j < sizeof(line); j++)
       {
         // Count number of semicolons
         if (line[j] == ';')
@@ -86,7 +86,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
         substring += 1;
       substring += 1;
 
-      unsigned int set_index = 0;
+      uint32_t set_index = 0;
 
       // Iterate over each set
       substring = strtok(substring, ";\n");
@@ -101,7 +101,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
         while (set_info_ptr != NULL)
         {
           // Get number and color
-          unsigned int number = 0;
+          uint32_t number = 0;
           char color[32]      = {0};
           sscanf(set_info_ptr, "%lu %s", &number, color);
 
@@ -123,7 +123,7 @@ void Day02::Configure(const ConfigurationResource configuration_resource,
         }
 
         // move substring to next set
-        unsigned int set_info_length = strlen(substring);
+        uint32_t set_info_length = strlen(substring);
         substring += set_info_length + 1;
 
         substring = strtok(substring, ";\n");
@@ -140,26 +140,26 @@ void Day02::Solve(RETURN_CODE_TYPE::Value& return_code)
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
   // Maximum number of cubes loaded
-  unsigned int max_num_red   = 12;
-  unsigned int max_num_green = 13;
-  unsigned int max_num_blue  = 14;
+  uint32_t max_num_red   = 12;
+  uint32_t max_num_green = 13;
+  uint32_t max_num_blue  = 14;
 
   // Puzzle answers
-  unsigned int valid_game_sum = 0;
-  unsigned int power_sum      = 0;
+  uint32_t valid_game_sum = 0;
+  uint32_t power_sum      = 0;
 
-  for (unsigned int i = 0; i < m_num_games; i++)
+  for (uint32_t i = 0; i < m_num_games; i++)
   {
     // Check if game is valid for max colors
     bool is_game_valid = true;
 
     // Tracking fewest colors for valid game
-    unsigned int fewest_red   = 0;
-    unsigned int fewest_blue  = 0;
-    unsigned int fewest_green = 0;
+    uint32_t fewest_red   = 0;
+    uint32_t fewest_blue  = 0;
+    uint32_t fewest_green = 0;
 
     // Check each set in each game
-    for (unsigned int j = 0; j < m_games[i].num_sets; j++)
+    for (uint32_t j = 0; j < m_games[i].num_sets; j++)
     {
       // Determine if number of colors exceed maximum
       if (m_games[i].sets[j].num_red > max_num_red ||
@@ -192,9 +192,9 @@ void Day02::Finalize(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  for (unsigned int i = 0; i < m_num_games; i++)
+  for (uint32_t i = 0; i < m_num_games; i++)
   {
-    for (unsigned int j = 0; j < m_games[i].num_sets; j++)
+    for (uint32_t j = 0; j < m_games[i].num_sets; j++)
     {
       m_games[i].num_sets = 0;
       delete[] m_games[i].sets;

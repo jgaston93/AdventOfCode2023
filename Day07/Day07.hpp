@@ -6,7 +6,7 @@
 namespace DAY07
 {
 
-const unsigned int num_cards_per_hand = 5;
+const uint32_t num_cards_per_hand = 5;
 
 enum HandType
 {
@@ -24,7 +24,7 @@ struct Hand
 {
   HandType hand_type = NUM_HAND_TYPE;
   char cards[num_cards_per_hand];
-  unsigned int bid = 0;
+  uint32_t bid = 0;
 };
 
 class Day07 : public Solver
@@ -39,9 +39,9 @@ class Day07 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
-  unsigned int m_num_hands = 0;
+  uint32_t m_num_hands = 0;
   struct Hand m_hands[2048];
-  unsigned int m_ranks[2048];
+  uint32_t m_ranks[2048];
 };
 
 } // namespace DAY07

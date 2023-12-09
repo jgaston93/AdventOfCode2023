@@ -44,7 +44,7 @@ void Day05::Configure(const ConfigurationResource configuration_resource,
     line_ptr       = strtok(NULL, " ");
     while (line_ptr != NULL)
     {
-      unsigned int seed_number = 0;
+      uint32_t seed_number = 0;
       sscanf(line_ptr, "%lu", &seed_number);
       m_seeds[m_num_seeds++] = seed_number;
       line_ptr               = strtok(NULL, " ");
@@ -97,23 +97,23 @@ void Day05::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  const unsigned int max_num_seed_ranges = 1024;
-  unsigned int num_seed_ranges           = 0;
+  const uint32_t max_num_seed_ranges = 1024;
+  uint32_t num_seed_ranges           = 0;
   struct SeedRange seed_ranges[max_num_seed_ranges];
-  for (unsigned int i = 0; i < m_num_seeds; i += 2)
+  for (uint32_t i = 0; i < m_num_seeds; i += 2)
   {
     seed_ranges[num_seed_ranges].start  = m_seeds[i];
     seed_ranges[num_seed_ranges].length = m_seeds[i + 1];
     num_seed_ranges++;
   }
 
-  for (unsigned int i = 0; i < m_num_mappings; i++)
+  for (uint32_t i = 0; i < m_num_mappings; i++)
   {
-    for (unsigned int j = 0; j < num_seed_ranges; j++)
+    for (uint32_t j = 0; j < num_seed_ranges; j++)
     {
       SeedRange& seed_range = seed_ranges[j];
       bool mapping_found    = false;
-      for (unsigned int k = 0; k < m_mappings[i].num_ranges && !mapping_found;
+      for (uint32_t k = 0; k < m_mappings[i].num_ranges && !mapping_found;
            k++)
       {
         MappingRange mapping_range = m_mappings[i].ranges[k];
@@ -162,8 +162,8 @@ void Day05::Solve(RETURN_CODE_TYPE::Value& return_code)
     }
   }
 
-  unsigned int lowest_location_number = 0xFFFFFFFF;
-  for (unsigned int i = 0; i < num_seed_ranges; i++)
+  uint32_t lowest_location_number = 0xFFFFFFFF;
+  for (uint32_t i = 0; i < num_seed_ranges; i++)
   {
     if (seed_ranges[i].start < lowest_location_number)
       lowest_location_number = seed_ranges[i].start;

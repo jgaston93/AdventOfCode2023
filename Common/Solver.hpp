@@ -11,6 +11,7 @@ struct RETURN_CODE_TYPE
   {
     NO_ERROR,
     INVALID_PARAM,
+    MEMORY_EXCEEDED,
   };
 };
 

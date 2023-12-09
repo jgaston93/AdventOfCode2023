@@ -41,7 +41,7 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
     sscanf(line, "%s", m_directions);
 
     // Get number of directions
-    for (unsigned int i = 0; i < 512 && line[i] != '\n'; i++)
+    for (uint32_t i = 0; i < 512 && line[i] != '\n'; i++)
       m_num_directions++;
 
     // Skip empty line
@@ -63,7 +63,7 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
     }
 
     // Connect nodes
-    for (unsigned int i = 0; i < m_num_nodes; i++)
+    for (uint32_t i = 0; i < m_num_nodes; i++)
     {
       Node& node_a = m_nodes[i];
 
@@ -76,7 +76,7 @@ void Day08::Configure(const ConfigurationResource configuration_resource,
       // Find left and right nodes
       bool left_found  = false;
       bool right_found = false;
-      for (unsigned int j = 0; j < m_num_nodes && (!left_found || !right_found);
+      for (uint32_t j = 0; j < m_num_nodes && (!left_found || !right_found);
            j++)
       {
         Node& node_b = m_nodes[j];
@@ -104,14 +104,14 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
-  unsigned long long int num_steps[512] = {0};
-  for (unsigned int i = 0; i < m_num_start_nodes; i++)
+  uint64_t num_steps[512] = {0};
+  for (uint32_t i = 0; i < m_num_start_nodes; i++)
   {
-    unsigned int destination_count = 0; // Number of times reached Z
-    unsigned int destination_count_goal =
+    uint32_t destination_count = 0; // Number of times reached Z
+    uint32_t destination_count_goal =
       1;                                // Target number of times Z is reached
-    unsigned int instruction_count = 0; // Count number of steps taken
-    unsigned int direction_counter = 0; // Index into direction list
+    uint32_t instruction_count = 0; // Count number of steps taken
+    uint32_t direction_counter = 0; // Index into direction list
     char current_direction =
       m_directions[direction_counter];     // Get first direction
     Node* current_node = m_start_nodes[i]; // Get start node
@@ -149,8 +149,8 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
   }
 
   // Initialize step counter list with initial step sizes
-  unsigned long long int step_counter[512] = {0};
-  for (unsigned int i = 0; i < m_num_start_nodes; i++)
+  uint64_t step_counter[512] = {0};
+  for (uint32_t i = 0; i < m_num_start_nodes; i++)
     step_counter[i] = num_steps[i];
 
   // Look for LCM
@@ -158,9 +158,9 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
   while (!destination_found)
   {
     // Find minimum value in step counter list
-    unsigned long long int min_value = 0xFFFFFFFFFFFFFFFF;
-    unsigned int min_value_index     = 0;
-    for (unsigned int i = 0; i < m_num_start_nodes; i++)
+    uint64_t min_value = 0xFFFFFFFFFFFFFFFF;
+    uint32_t min_value_index     = 0;
+    for (uint32_t i = 0; i < m_num_start_nodes; i++)
     {
       if (step_counter[i] < min_value)
       {
@@ -174,7 +174,7 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
 
     // Check if LCM found
     bool all_matches = true;
-    for (unsigned int i = 0; i < m_num_start_nodes - 1 && all_matches; i++)
+    for (uint32_t i = 0; i < m_num_start_nodes - 1 && all_matches; i++)
     {
       if (step_counter[i] != step_counter[i + 1])
         all_matches = false;

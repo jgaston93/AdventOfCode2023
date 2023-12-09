@@ -7,16 +7,16 @@ namespace DAY02
 {
 struct Game
 {
-  unsigned int id       = 0;
-  unsigned int num_sets = 0;
+  uint32_t id       = 0;
+  uint32_t num_sets = 0;
   struct Set* sets      = NULL;
 };
 
 struct Set
 {
-  unsigned int num_red   = 0;
-  unsigned int num_green = 0;
-  unsigned int num_blue  = 0;
+  uint32_t num_red   = 0;
+  uint32_t num_green = 0;
+  uint32_t num_blue  = 0;
 };
 
 class Day02 : public Solver
@@ -31,7 +31,7 @@ class Day02 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
-  unsigned int m_num_games;
+  uint32_t m_num_games;
   struct Game* m_games;
 };
 

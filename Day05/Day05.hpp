@@ -8,20 +8,20 @@ namespace DAY05
 
 struct SeedRange
 {
-  unsigned int start  = 0;
-  unsigned int length = 0;
+  uint32_t start  = 0;
+  uint32_t length = 0;
 };
 
 struct MappingRange
 {
-  unsigned int destination_start = 0;
-  unsigned int source_start      = 0;
-  unsigned int length            = 0;
+  uint32_t destination_start = 0;
+  uint32_t source_start      = 0;
+  uint32_t length            = 0;
 };
 
 struct Mapping
 {
-  unsigned int num_ranges = 0;
+  uint32_t num_ranges = 0;
   MappingRange ranges[256];
 };
 
@@ -37,9 +37,9 @@ class Day05 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
-  unsigned int m_num_seeds;
-  unsigned int m_seeds[256];
-  unsigned int m_num_mappings;
+  uint32_t m_num_seeds;
+  uint32_t m_seeds[256];
+  uint32_t m_num_mappings;
   struct Mapping m_mappings[256];
 };
 

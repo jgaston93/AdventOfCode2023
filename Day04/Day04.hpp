@@ -8,12 +8,12 @@ namespace DAY04
 
 struct Card
 {
-  unsigned int card_number;
-  unsigned int card_count;
-  unsigned int winning_number_count;
-  unsigned int my_number_count;
-  unsigned int* winning_numbers;
-  unsigned int* my_numbers;
+  uint32_t card_number;
+  uint32_t card_count;
+  uint32_t winning_number_count;
+  uint32_t my_number_count;
+  uint32_t* winning_numbers;
+  uint32_t* my_numbers;
 };
 
 class Day04 : public Solver
@@ -28,7 +28,7 @@ class Day04 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
-  unsigned int m_card_count;
+  uint32_t m_card_count;
   struct Card* m_cards;
 };
 

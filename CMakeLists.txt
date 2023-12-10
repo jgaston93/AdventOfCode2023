@@ -11,9 +11,10 @@ subdirs(Day06)
 subdirs(Day07)
 subdirs(Day08)
 subdirs(Day09)
+subdirs(Day10)
 
 add_executable(aoc_driver main.cpp)
 
 target_include_directories(aoc_driver PUBLIC ${CMAKE_SOURCE_DIR}/Common)
 
-target_link_libraries(aoc_driver PUBLIC day01 day02 day03 day04 day05 day06 day07 day08 day09)
+target_link_libraries(aoc_driver PUBLIC day01 day02 day03 day04 day05 day06 day07 day08 day09 day10)

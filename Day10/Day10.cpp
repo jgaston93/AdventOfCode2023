@@ -1,10 +1,14 @@
 #include <cstdio>
 #include <cstring>
 #include <queue>
+#include <stack>
 
 #include "Day10.hpp"
 
 using namespace DAY10;
+
+// wchar_t TileTypeString[9] = L"║═╚╝╗╔░█";
+char TileTypeCharacters[9] = "|-LJ7F.S";
 
 Day10::Day10() : m_num_rows(0), m_num_cols(0) {}
 
@@ -48,7 +52,7 @@ void Day10::Configure(const ConfigurationResource configuration_resource,
              line[i] != '\n' && return_code == RETURN_CODE_TYPE::NO_ERROR; i++)
         {
           m_num_cols++;
-          if (m_num_cols > MAX_NUM_COLS)
+          if (m_num_cols > MAX_NUM_COLS - 2)
             return_code = RETURN_CODE_TYPE::MEMORY_EXCEEDED;
         }
         num_cols_initialized = true;
@@ -58,7 +62,9 @@ void Day10::Configure(const ConfigurationResource configuration_resource,
       for (uint32_t i = 0;
            i < m_num_cols && return_code == RETURN_CODE_TYPE::NO_ERROR; i++)
       {
-        Tile& tile = m_tiles[m_num_rows][i];
+        Tile& tile = m_tiles[m_num_rows + 1][i + 1];
+        tile.loc_y = m_num_rows;
+        tile.loc_x = i;
         switch (line[i])
         {
         case '|':
@@ -90,9 +96,12 @@ void Day10::Configure(const ConfigurationResource configuration_resource,
       }
 
       m_num_rows++;
-      if (m_num_rows > MAX_NUM_ROWS)
+      if (m_num_rows > MAX_NUM_ROWS - 2)
         return_code = RETURN_CODE_TYPE::MEMORY_EXCEEDED;
     }
+
+    m_num_rows += 2;
+    m_num_cols += 2;
 
     // Make connections among tiles
     for (int32_t i = 0;
@@ -178,20 +187,107 @@ void Day10::Solve(RETURN_CODE_TYPE::Value& return_code)
   {
     Tile* tile = q.front();
     q.pop();
-    tile->visited = true;
-    for (uint32_t i = 0; i < tile->num_connected_tiles; i++)
+    tile->visited   = true;
+    tile->main_loop = true;
+
+    uint32_t distance   = tile->distance + 1;
+    bool new_tile_found = false;
+
+    if (tile->north_tile != NULL && !(tile->north_tile->visited))
     {
-      if (!(tile->connected_tiles[i]->visited))
+      new_tile_found             = true;
+      tile->north_tile->distance = distance;
+      q.push(tile->north_tile);
+    }
+    if (tile->south_tile != NULL && !(tile->south_tile->visited))
+    {
+      new_tile_found             = true;
+      tile->south_tile->distance = distance;
+      q.push(tile->south_tile);
+    }
+    if (tile->east_tile != NULL && !(tile->east_tile->visited))
+    {
+      new_tile_found            = true;
+      tile->east_tile->distance = distance;
+      q.push(tile->east_tile);
+    }
+    if (tile->west_tile != NULL && !(tile->west_tile->visited))
+    {
+      new_tile_found            = true;
+      tile->west_tile->distance = distance;
+      q.push(tile->west_tile);
+    }
+
+    if (new_tile_found && distance > max_distance)
+      max_distance = distance;
+  }
+
+  printf("Part 1 solution: %lu\n", max_distance);
+
+  for (uint32_t i = 0; i < m_num_rows; i++)
+  {
+    for (uint32_t j = 0; j < m_num_cols; j++)
+    {
+      // Clean up tiles not in main loop
+      if (!m_tiles[i][j].main_loop)
       {
-        uint32_t distance = tile->distance + 1;
-        if (distance > max_distance)
-          max_distance = distance;
-        tile->connected_tiles[i]->distance = distance;
-        q.push(tile->connected_tiles[i]);
+        m_tiles[i][j].type       = Ground;
+        m_tiles[i][j].north_tile = NULL;
+        m_tiles[i][j].south_tile = NULL;
+        m_tiles[i][j].east_tile  = NULL;
+        m_tiles[i][j].west_tile  = NULL;
+        printf(".");
+      }
+      // Reset main loop tiles for another loop
+      else
+      {
+        m_tiles[i][j].visited = false;
+        printf("%c", TileTypeCharacters[m_tiles[i][j].type]);
       }
     }
+    printf("\n");
   }
-  printf("Part 1 solution: %lu\n", max_distance);
+
+  // std::stack<Tile*> s;
+  // s.push(m_start_tile);
+
+  // while (!s.empty())
+  // {
+  //   Tile* tile = s.top();
+  //   s.pop();
+  //   tile->visited = true;
+
+  //   uint32_t distance   = tile->distance + 1;
+  //   bool new_tile_found = false;
+
+  //   if (tile->north_tile != NULL && !(tile->north_tile->visited))
+  //   {
+  //     new_tile_found             = true;
+  //     tile->north_tile->distance = distance;
+  //     q.push(tile->north_tile);
+  //   }
+  //   if (tile->south_tile != NULL && !(tile->south_tile->visited))
+  //   {
+  //     new_tile_found             = true;
+  //     tile->south_tile->distance = distance;
+  //     q.push(tile->south_tile);
+  //   }
+  //   if (tile->east_tile != NULL && !(tile->east_tile->visited))
+  //   {
+  //     new_tile_found            = true;
+  //     tile->east_tile->distance = distance;
+  //     q.push(tile->east_tile);
+  //   }
+  //   if (tile->west_tile != NULL && !(tile->west_tile->visited))
+  //   {
+  //     new_tile_found            = true;
+  //     tile->west_tile->distance = distance;
+  //     q.push(tile->west_tile);
+  //   }
+
+  //   if (new_tile_found && distance > max_distance)
+  //     max_distance = distance;
+  // }
 }
 
 void Day10::Finalize(RETURN_CODE_TYPE::Value& return_code)
@@ -208,12 +304,7 @@ void Day10::MakeNorthConnection(int32_t row_index, int32_t col_index,
     Tile& north_tile = m_tiles[row_index - 1][col_index];
     if (north_tile.type == Vertical || north_tile.type == SouthAndEast ||
         north_tile.type == SouthAndWest)
-    {
-      if (tile.num_connected_tiles < MAX_NUM_CONNECTED_TILES)
-        tile.connected_tiles[tile.num_connected_tiles++] = &north_tile;
-      else
-        return_code = RETURN_CODE_TYPE::MEMORY_EXCEEDED;
-    }
+      tile.north_tile = &north_tile;
   }
 }
 
@@ -226,12 +317,7 @@ void Day10::MakeSouthConnection(int32_t row_index, int32_t col_index,
     Tile& south_tile = m_tiles[row_index + 1][col_index];
     if (south_tile.type == Vertical || south_tile.type == NorthAndEast ||
         south_tile.type == NorthAndWest)
-    {
-      if (tile.num_connected_tiles < MAX_NUM_CONNECTED_TILES)
-        tile.connected_tiles[tile.num_connected_tiles++] = &south_tile;
-      else
-        return_code = RETURN_CODE_TYPE::MEMORY_EXCEEDED;
-    }
+      tile.south_tile = &south_tile;
   }
 }
 
@@ -244,12 +330,7 @@ void Day10::MakeEastConnection(int32_t row_index, int32_t col_index,
     Tile& east_tile = m_tiles[row_index][col_index + 1];
     if (east_tile.type == Horizontal || east_tile.type == NorthAndWest ||
         east_tile.type == SouthAndWest)
-    {
-      if (tile.num_connected_tiles < MAX_NUM_CONNECTED_TILES)
-        tile.connected_tiles[tile.num_connected_tiles++] = &east_tile;
-      else
-        return_code = RETURN_CODE_TYPE::MEMORY_EXCEEDED;
-    }
+      tile.east_tile = &east_tile;
   }
 }
 
@@ -262,11 +343,6 @@ void Day10::MakeWestConnection(int32_t row_index, int32_t col_index,
     Tile& west_tile = m_tiles[row_index][col_index - 1];
     if (west_tile.type == Horizontal || west_tile.type == NorthAndEast ||
         west_tile.type == SouthAndEast)
-    {
-      if (tile.num_connected_tiles < MAX_NUM_CONNECTED_TILES)
-        tile.connected_tiles[tile.num_connected_tiles++] = &west_tile;
-      else
-        return_code = RETURN_CODE_TYPE::MEMORY_EXCEEDED;
-    }
+      tile.west_tile = &west_tile;
   }
 }

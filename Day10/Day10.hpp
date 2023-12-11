@@ -1,13 +1,15 @@
 #ifndef DAY_10_HPP
 #define DAY_10_HPP
 
+#include <map>
+
 #include "Solver.hpp"
 
 namespace DAY10
 {
 
-const uint32_t MAX_NUM_ROWS            = 140;
-const uint32_t MAX_NUM_COLS            = 140;
+const uint32_t MAX_NUM_ROWS            = 142;
+const uint32_t MAX_NUM_COLS            = 142;
 const uint32_t MAX_NUM_CONNECTED_TILES = 2;
 
 enum TileType
@@ -24,11 +26,16 @@ enum TileType
 
 struct Tile
 {
-  TileType type                = Ground;
-  uint32_t num_connected_tiles = 0;
-  Tile* connected_tiles[2]     = {0};
-  uint32_t distance            = 0xFFFFFFFF;
-  bool visited                 = false;
+  TileType type     = Ground;
+  Tile* north_tile  = NULL;
+  Tile* south_tile  = NULL;
+  Tile* east_tile   = NULL;
+  Tile* west_tile   = NULL;
+  uint32_t distance = 0xFFFFFFFF;
+  bool visited      = false;
+  bool main_loop    = false;
+  int32_t loc_x     = 0;
+  int32_t loc_y     = 0;
 };
 
 class Day10 : public Solver

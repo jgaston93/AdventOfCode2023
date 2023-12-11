@@ -20,7 +20,6 @@ struct Tile
   uint32_t id       = 0;
   TileType type     = Space;
   uint32_t distance = 1;
-  bool visited      = false;
 };
 
 struct Position

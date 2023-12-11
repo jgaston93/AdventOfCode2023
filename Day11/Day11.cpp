@@ -92,8 +92,8 @@ void Day11::Configure(const ConfigurationResource configuration_resource,
           row_galaxy_count[i]++;
           col_galaxy_count[j]++;
           // Add coordinates to coordinate list
-          m_galaxy_coordinate_list[i].x = i;
-          m_galaxy_coordinate_list[i].y = j;
+          m_galaxy_coordinate_list[i].x = j;
+          m_galaxy_coordinate_list[i].y = i;
         }
       }
     }
@@ -115,13 +115,96 @@ void Day11::Configure(const ConfigurationResource configuration_resource,
 void Day11::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
+  uint32_t distance_map[MAX_NUM_ROWS][MAX_NUM_COLS];
+  bool visited_map[MAX_NUM_ROWS][MAX_NUM_COLS];
+
+  memset(distance_map, 0xFFFFFFFF, sizeof(distance_map));
+  memset(visited_map, 0x00, sizeof(visited_map));
 
   for (uint32_t i = 0; i < m_num_galaxies - 1; i++)
   {
+    Position start_position = m_galaxy_coordinate_list[i];
+
     for (uint32_t j = i + 1; j < m_num_galaxies; j++)
     {
-      Position start_position = m_galaxy_coordinate_list[i];
-      Position end_position   = m_galaxy_coordinate_list[j];
+      Position end_position = m_galaxy_coordinate_list[j];
+
+      // Get bounding box containing start and end
+      uint32_t min_x = start_position.x;
+      if (end_position.x < min_x)
+        min_x = end_position.x;
+
+      uint32_t max_x = start_position.x;
+      if (end_position.x > max_x)
+        max_x = end_position.x;
+
+      uint32_t min_y = start_position.y;
+      if (end_position.y < min_y)
+        min_y = end_position.y;
+
+      uint32_t max_y = start_position.y;
+      if (end_position.y > max_y)
+        max_y = end_position.y;
+
+      // Reset distance and visited maps inside bounding box
+      for (uint32_t k = min_y; k <= max_y; k++)
+      {
+        for (uint32_t l = min_x; l <= max_x; l++)
+        {
+          distance_map[k][l] = 0xFFFFFFFF;
+          visited_map[k][l]  = false;
+        }
+      }
+
+      // Initialize start position values
+      distance_map[start_position.y][start_position.x] = 0;
+      visited_map[start_position.y][start_position.x]  = true;
+
+      Position pos           = start_position;
+      bool destination_found = false;
+      bool all_tiles_visited = false;
+
+      while (!destination_found && !all_tiles_visited)
+      {
+        visited_map[pos.y][pos.x] = true;
+
+        int32_t top = pos.y - 1;
+        if (top < min_y)
+          top = min_y;
+
+        int32_t bottom = pos.y + 1;
+        if (bottom > max_y)
+          bottom = max_y;
+
+        int32_t left = pos.x - 1;
+        if (left < min_x)
+          left = min_x;
+
+        int32_t right = pos.x + 1;
+        if (right > max_x)
+          right = max_x;
+
+        // Update distances for neighboring tiles
+        for (uint32_t y = top; y <= bottom; y++)
+        {
+          for (uint32_t x = left; x <= right; x++)
+          {
+            if (!visited_map[y][x])
+            {
+              distance_map[y][x] =
+                distance_map[pos.y][pos.x] + m_space[y][x].distance;
+            }
+          }
+        }
+
+        // Find closest tile
+        for (uint32_t y = min_y; y <= max_y; y++)
+        {
+          for (uint32_t x = min_x; x <= max_x; x++)
+          {
+          }
+        }
+      }
     }
   }
 }

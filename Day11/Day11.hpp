@@ -17,15 +17,16 @@ enum TileType
 
 struct Tile
 {
-  uint32_t id       = 0;
-  TileType type     = Space;
-  uint32_t distance = 1;
+  uint32_t id            = 0;
+  TileType type          = Space;
+  uint32_t distance      = 1;
+  uint32_t real_distance = 1;
 };
 
 struct Position
 {
-  uint32_t x = 0;
-  uint32_t y = 0;
+  int32_t x = 0;
+  int32_t y = 0;
 };
 
 class Day11 : public Solver

@@ -255,7 +255,7 @@ void Day10::Solve(RETURN_CODE_TYPE::Value& return_code)
     Tile* tile = s.top();
     s.pop();
     tile->visited = true;
-    printf("%lu/%lu\n", num_visited + 1, m_num_main_loop);
+    // printf("%lu/%lu\n", num_visited + 1, m_num_main_loop);
     num_visited++;
 
     // Determine direction traveled
@@ -278,13 +278,13 @@ void Day10::Solve(RETURN_CODE_TYPE::Value& return_code)
       {
         if (!m_tiles[north_y][tile->loc_x].main_loop)
           FloodFill(north_y, tile->loc_x, Outside);
-        if (!m_tiles[south_y][tile->loc_x].main_loop)
-          FloodFill(south_y, tile->loc_x, Inside);
+        // if (!m_tiles[south_y][tile->loc_x].main_loop)
+        //   FloodFill(south_y, tile->loc_x, Inside);
       }
       if (delta_x < 0)
       {
-        if (!m_tiles[north_y][tile->loc_x].main_loop)
-          FloodFill(north_y, tile->loc_x, Inside);
+        // if (!m_tiles[north_y][tile->loc_x].main_loop)
+        //   FloodFill(north_y, tile->loc_x, Inside);
         if (!m_tiles[south_y][tile->loc_x].main_loop)
           FloodFill(south_y, tile->loc_x, Outside);
       }
@@ -300,8 +300,8 @@ void Day10::Solve(RETURN_CODE_TYPE::Value& return_code)
 
       if (delta_y > 0)
       {
-        if (!m_tiles[tile->loc_y][west_x].main_loop)
-          FloodFill(tile->loc_y, west_x, Inside);
+        // if (!m_tiles[tile->loc_y][west_x].main_loop)
+        //   FloodFill(tile->loc_y, west_x, Inside);
         if (!m_tiles[tile->loc_y][east_x].main_loop)
           FloodFill(tile->loc_y, east_x, Outside);
       }
@@ -309,8 +309,8 @@ void Day10::Solve(RETURN_CODE_TYPE::Value& return_code)
       {
         if (!m_tiles[tile->loc_y][west_x].main_loop)
           FloodFill(tile->loc_y, west_x, Outside);
-        if (!m_tiles[tile->loc_y][east_x].main_loop)
-          FloodFill(tile->loc_y, east_x, Inside);
+        // if (!m_tiles[tile->loc_y][east_x].main_loop)
+        //   FloodFill(tile->loc_y, east_x, Inside);
       }
     }
 

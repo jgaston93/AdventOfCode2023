@@ -68,7 +68,6 @@ void Day10::Configure(const ConfigurationResource configuration_resource,
         Tile& tile = m_tiles[m_num_rows][i];
         tile.loc_y = m_num_rows;
         tile.loc_x = i;
-        tile.id    = m_num_main_loop++;
         switch (line[i])
         {
         case '|':
@@ -190,6 +189,7 @@ void Day10::Solve(RETURN_CODE_TYPE::Value& return_code)
     q.pop();
     tile->visited   = true;
     tile->main_loop = true;
+    tile->id        = m_num_main_loop++;
 
     uint32_t distance   = tile->distance + 1;
     bool new_tile_found = false;
@@ -238,11 +238,7 @@ void Day10::Solve(RETURN_CODE_TYPE::Value& return_code)
         m_tiles[i][j].east_tile  = NULL;
         m_tiles[i][j].west_tile  = NULL;
       }
-      // Reset main loop tiles for another loop
-      else
-      {
-        m_tiles[i][j].visited = false;
-      }
+      m_tiles[i][j].visited = false;
     }
   }
 
@@ -451,8 +447,7 @@ void Day10::FloodFill(int32_t row_index, int32_t col_index, TileType type)
     {
       for (uint32_t j = left; j <= right; j++)
       {
-        if (!(i == row && j == col) && m_tiles[i][j].type != Outside &&
-            m_tiles[i][j].type != Inside && !m_tiles[i][j].main_loop)
+        if (!(i == row && j == col) && m_tiles[i][j].type == Ground)
         {
           row_q.push(i);
           col_q.push(j);

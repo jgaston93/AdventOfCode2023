@@ -107,11 +107,10 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
   uint64_t num_steps[512] = {0};
   for (uint32_t i = 0; i < m_num_start_nodes; i++)
   {
-    uint32_t destination_count = 0; // Number of times reached Z
-    uint32_t destination_count_goal =
-      1;                                // Target number of times Z is reached
-    uint32_t instruction_count = 0; // Count number of steps taken
-    uint32_t direction_counter = 0; // Index into direction list
+    uint32_t destination_count      = 0; // Number of times reached Z
+    uint32_t destination_count_goal = 1; // Target number of times Z is reached
+    uint32_t instruction_count      = 0; // Count number of steps taken
+    uint32_t direction_counter      = 0; // Index into direction list
     char current_direction =
       m_directions[direction_counter];     // Get first direction
     Node* current_node = m_start_nodes[i]; // Get start node
@@ -158,8 +157,8 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
   while (!destination_found)
   {
     // Find minimum value in step counter list
-    uint64_t min_value = 0xFFFFFFFFFFFFFFFF;
-    uint32_t min_value_index     = 0;
+    uint64_t min_value       = 0xFFFFFFFFFFFFFFFF;
+    uint32_t min_value_index = 0;
     for (uint32_t i = 0; i < m_num_start_nodes; i++)
     {
       if (step_counter[i] < min_value)
@@ -182,7 +181,7 @@ void Day08::Solve(RETURN_CODE_TYPE::Value& return_code)
     if (all_matches)
       destination_found = true;
   }
-  printf("Part 2 solution: %llu", step_counter[0]);
+  printf("Part 2 solution: %llu\n", step_counter[0]);
 }
 
 void Day08::Finalize(RETURN_CODE_TYPE::Value& return_code)

@@ -52,8 +52,8 @@ void Day06::Configure(const ConfigurationResource configuration_resource,
     fgets(line, sizeof(line), fp);
     line_ptr = &line[0];
 
-    line_ptr             = strtok(line_ptr, ":");
-    line_ptr             = strtok(NULL, " ");
+    line_ptr         = strtok(line_ptr, ":");
+    line_ptr         = strtok(NULL, " ");
     uint32_t counter = 0;
     while (line_ptr != NULL)
     {
@@ -62,11 +62,6 @@ void Day06::Configure(const ConfigurationResource configuration_resource,
       m_races[counter].distance = distance;
       counter++;
       line_ptr = strtok(NULL, " ");
-    }
-
-    for (uint32_t i = 0; i < m_num_race; i++)
-    {
-      printf("%lu %lu\n", m_races[i].time, m_races[i].distance);
     }
 
     fclose(fp);

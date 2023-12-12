@@ -8,9 +8,8 @@
 namespace DAY10
 {
 
-const uint32_t MAX_NUM_ROWS            = 142;
-const uint32_t MAX_NUM_COLS            = 142;
-const uint32_t MAX_NUM_CONNECTED_TILES = 2;
+const uint32_t MAX_NUM_ROWS = 140;
+const uint32_t MAX_NUM_COLS = 140;
 
 enum TileType
 {
@@ -21,11 +20,14 @@ enum TileType
   SouthAndWest,
   SouthAndEast,
   Ground,
-  Start
+  Start,
+  Outside,
+  Inside,
 };
 
 struct Tile
 {
+  uint32_t id       = 0;
   TileType type     = Ground;
   Tile* north_tile  = NULL;
   Tile* south_tile  = NULL;
@@ -59,10 +61,13 @@ class Day10 : public Solver
   void MakeWestConnection(int32_t row_index, int32_t col_index,
                           RETURN_CODE_TYPE::Value& return_code);
 
+  void FloodFill(int32_t row_index, int32_t col_index, TileType type);
+
   uint32_t m_num_rows;
   uint32_t m_num_cols;
   Tile m_tiles[MAX_NUM_ROWS][MAX_NUM_COLS];
   Tile* m_start_tile;
+  uint32_t m_num_main_loop;
 };
 
 } // namespace DAY10

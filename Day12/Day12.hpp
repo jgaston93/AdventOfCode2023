@@ -6,6 +6,15 @@
 namespace DAY12
 {
 
+const uint32_t MAX_NUM_RECORDS = 1000;
+
+struct Record
+{
+  char spring_conditions[32];
+  uint32_t num_sets = 0;
+  uint32_t sets[16];
+};
+
 class Day12 : public Solver
 {
   public:
@@ -18,6 +27,8 @@ class Day12 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
+  uint32_t m_num_records;
+  Record m_records[MAX_NUM_RECORDS];
 };
 
 } // namespace DAY12

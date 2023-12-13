@@ -5,7 +5,7 @@
 
 using namespace DAY13;
 
-Day13::Day13() {}
+Day13::Day13() : m_num_maps(0) {}
 
 Day13::~Day13()
 {
@@ -32,6 +32,28 @@ void Day13::Configure(const ConfigurationResource configuration_resource,
   if (return_code == RETURN_CODE_TYPE::NO_ERROR)
   {
     char line[512] = {0};
+
+    while (fgets(line, sizeof(line), fp) != NULL)
+    {
+      Map& map = m_maps[m_num_maps++];
+
+      uint32_t line_length = strlen(line);
+      map.num_cols         = line_length;
+      while (line_length > 1 && !feof(fp))
+      {
+        if (line[line_length - 1] == '\n')
+          line[line_length - 1] = '\0';
+        strcpy(map.grid[map.num_rows++], line);
+        fgets(line, sizeof(line), fp);
+        line_length = strlen(line);
+      }
+      if (feof(fp))
+      {
+        if (line[line_length - 1] == '\n')
+          line[line_length - 1] = '\0';
+        strcpy(map.grid[map.num_rows++], line);
+      }
+    }
 
     fclose(fp);
   }

@@ -6,6 +6,13 @@
 namespace DAY13
 {
 
+struct Map
+{
+  uint32_t num_rows = 0;
+  uint32_t num_cols = 0;
+  char grid[64][64];
+};
+
 class Day13 : public Solver
 {
   public:
@@ -18,6 +25,8 @@ class Day13 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
+  uint32_t m_num_maps;
+  Map m_maps[1024];
 };
 
 } // namespace DAY13

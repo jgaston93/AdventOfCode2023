@@ -15,6 +15,7 @@ subdirs(Day10)
 subdirs(Day11)
 subdirs(Day12)
 subdirs(Day13)
+subdirs(Day14)
 
 add_executable(aoc_driver main.cpp)
 
@@ -32,4 +33,5 @@ target_link_libraries(aoc_driver PUBLIC day01
                                         day10
                                         day11
                                         day12
-                                        day13)
+                                        day13
+                                        day14)

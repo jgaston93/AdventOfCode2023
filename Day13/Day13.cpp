@@ -74,10 +74,13 @@ void Day13::Solve(RETURN_CODE_TYPE::Value& return_code)
     for (uint32_t j = 0; j < map.num_rows - 1 && !full_reflection_found; j++)
     {
       // Check if two rows match
-      bool all_match = true;
+      uint32_t smudge_count = 0;
+      bool all_match        = true;
       for (uint32_t k = 0; k < map.num_cols && all_match; k++)
       {
         if (map.grid[j][k] != map.grid[j + 1][k])
+          smudge_count++;
+        if (smudge_count > 1)
           all_match = false;
       }
 
@@ -95,12 +98,17 @@ void Day13::Solve(RETURN_CODE_TYPE::Value& return_code)
           for (uint32_t y = 0; y < map.num_cols && all_match; y++)
           {
             if (map.grid[x][y] != map.grid[opposite_index_counter][y])
+              smudge_count++;
+            if (smudge_count > 1)
               all_match = false;
           }
           if (!all_match)
             full_reflection_found = false;
           opposite_index_counter++;
         }
+
+        if (smudge_count != 1)
+          full_reflection_found = false;
 
         if (full_reflection_found)
           sum += (j + 1) * 100;
@@ -113,10 +121,13 @@ void Day13::Solve(RETURN_CODE_TYPE::Value& return_code)
       for (uint32_t j = 0; j < map.num_cols - 1 && !full_reflection_found; j++)
       {
         // Check if two rows match
-        bool all_match = true;
+        uint32_t smudge_count = 0;
+        bool all_match        = true;
         for (uint32_t k = 0; k < map.num_rows && all_match; k++)
         {
           if (map.grid[k][j] != map.grid[k][j + 1])
+            smudge_count++;
+          if (smudge_count > 1)
             all_match = false;
         }
 
@@ -134,12 +145,17 @@ void Day13::Solve(RETURN_CODE_TYPE::Value& return_code)
             for (uint32_t y = 0; y < map.num_rows && all_match; y++)
             {
               if (map.grid[y][x] != map.grid[y][opposite_index_counter])
+                smudge_count++;
+              if (smudge_count > 1)
                 all_match = false;
             }
             if (!all_match)
               full_reflection_found = false;
             opposite_index_counter++;
           }
+
+          if (smudge_count != 1)
+            full_reflection_found = false;
 
           if (full_reflection_found)
             sum += j + 1;

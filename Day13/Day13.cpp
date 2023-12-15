@@ -38,7 +38,7 @@ void Day13::Configure(const ConfigurationResource configuration_resource,
       Map& map = m_maps[m_num_maps++];
 
       uint32_t line_length = strlen(line);
-      map.num_cols         = line_length;
+      map.num_cols         = line_length - 1;
       while (line_length > 1 && !feof(fp))
       {
         if (line[line_length - 1] == '\n')
@@ -63,15 +63,15 @@ void Day13::Solve(RETURN_CODE_TYPE::Value& return_code)
 {
   return_code = RETURN_CODE_TYPE::NO_ERROR;
 
+  uint32_t sum = 0;
+
   for (uint32_t i = 0; i < m_num_maps; i++)
   {
     Map& map = m_maps[i];
 
     // Check horizontal reflection
-    bool horizontal_reflection_found    = false;
-    int32_t horizontal_reflection_index = 0;
-    for (uint32_t j = 0; j < map.num_rows - 1 && !horizontal_reflection_found;
-         j++)
+    bool full_reflection_found = false;
+    for (uint32_t j = 0; j < map.num_rows - 1 && !full_reflection_found; j++)
     {
       // Check if two rows match
       bool all_match = true;
@@ -84,88 +84,70 @@ void Day13::Solve(RETURN_CODE_TYPE::Value& return_code)
       // Record matching row index
       if (all_match)
       {
-        horizontal_reflection_found = true;
-        horizontal_reflection_index = j;
-      }
-    }
-
-    // Check for full reflection
-    if (horizontal_reflection_found)
-    {
-      bool full_reflection_found = true;
-      for (int32_t j = horizontal_reflection_index - 1;
-           j >= 0 && map.num_rows - j < map.num_rows && full_reflection_found;
-           j--)
-      {
-        bool all_match = true;
-        for (uint32_t k = 0; k < map.num_cols && all_match; k++)
+        full_reflection_found           = true;
+        uint32_t opposite_index_counter = j + 2;
+        for (int32_t x = j - 1;
+             x >= 0 && opposite_index_counter < map.num_rows &&
+             full_reflection_found;
+             x--)
         {
-          if (map.grid[j][k] != map.grid[map.num_rows - j][k])
-            all_match = false;
+          bool all_match = true;
+          for (uint32_t y = 0; y < map.num_cols && all_match; y++)
+          {
+            if (map.grid[x][y] != map.grid[opposite_index_counter][y])
+              all_match = false;
+          }
+          if (!all_match)
+            full_reflection_found = false;
+          opposite_index_counter++;
         }
-        if (!all_match)
-          full_reflection_found = false;
-      }
 
-      if (full_reflection_found)
-      {
-        printf("%lu\n", horizontal_reflection_index);
+        if (full_reflection_found)
+          sum += (j + 1) * 100;
       }
-      else
-        horizontal_reflection_found = false;
     }
 
-    if (!horizontal_reflection_found)
+    if (!full_reflection_found)
     {
       // Check vertical reflection
-      bool vertical_reflection_found    = false;
-      int32_t vertical_reflection_index = 0;
-      for (uint32_t j = 0; j < map.num_rows - 1 && !vertical_reflection_found;
-           j++)
+      for (uint32_t j = 0; j < map.num_cols - 1 && !full_reflection_found; j++)
       {
         // Check if two rows match
         bool all_match = true;
-        for (uint32_t k = 0; k < map.num_cols && all_match; k++)
+        for (uint32_t k = 0; k < map.num_rows && all_match; k++)
         {
-          if (map.grid[j][k] != map.grid[j + 1][k])
+          if (map.grid[k][j] != map.grid[k][j + 1])
             all_match = false;
         }
 
         // Record matching row index
         if (all_match)
         {
-          vertical_reflection_found = true;
-          vertical_reflection_index = j;
-        }
-      }
-
-      // Check for full reflection
-      if (vertical_reflection_found)
-      {
-        bool full_reflection_found = true;
-        for (int32_t j = vertical_reflection_index - 1;
-             j >= 0 && map.num_rows - j < map.num_rows && full_reflection_found;
-             j--)
-        {
-          bool all_match = true;
-          for (uint32_t k = 0; k < map.num_cols && all_match; k++)
+          full_reflection_found           = true;
+          uint32_t opposite_index_counter = j + 2;
+          for (int32_t x = j - 1;
+               x >= 0 && opposite_index_counter < map.num_cols &&
+               full_reflection_found;
+               x--)
           {
-            if (map.grid[j][k] != map.grid[map.num_rows - j][k])
-              all_match = false;
+            bool all_match = true;
+            for (uint32_t y = 0; y < map.num_rows && all_match; y++)
+            {
+              if (map.grid[y][x] != map.grid[y][opposite_index_counter])
+                all_match = false;
+            }
+            if (!all_match)
+              full_reflection_found = false;
+            opposite_index_counter++;
           }
-          if (!all_match)
-            full_reflection_found = false;
-        }
 
-        if (full_reflection_found)
-        {
-          printf("%lu\n", vertical_reflection_index);
+          if (full_reflection_found)
+            sum += j + 1;
         }
-        else
-          vertical_reflection_found = false;
       }
     }
   }
+  printf("Part 1 solution: %lu\n", sum);
 }
 
 void Day13::Finalize(RETURN_CODE_TYPE::Value& return_code)

@@ -6,6 +6,9 @@
 namespace DAY14
 {
 
+const uint32_t MAX_DISH_SIZE = 100;
+const uint32_t MAX_NUM_DISH  = 2;
+
 class Day14 : public Solver
 {
   public:
@@ -18,6 +21,9 @@ class Day14 : public Solver
   void Finalize(RETURN_CODE_TYPE::Value& return_code);
 
   private:
+  uint32_t m_current_dish;
+  uint32_t m_dish_size;
+  char m_dish[MAX_NUM_DISH][MAX_DISH_SIZE][MAX_DISH_SIZE];
 };
 
 } // namespace DAY14

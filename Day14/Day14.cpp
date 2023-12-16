@@ -111,11 +111,8 @@ void Day14::Solve(RETURN_CODE_TYPE::Value& return_code)
     load_list[i] = load_sum;
   }
 
-  uint32_t num_loads = 1000;
-  for (uint32_t i = / 2; i <)
-
-    // Calculate load
-    uint32_t load_sum = 0;
+  // Calculate load
+  uint32_t load_sum = 0;
   for (uint32_t x = 0; x < m_dish_size; x++)
   {
     for (uint32_t y = 0; y < m_dish_size; y++)
